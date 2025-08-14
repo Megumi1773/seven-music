@@ -22,11 +22,16 @@ import {
   PlayerPlay,
   PlayerSkipBack,
   PlayerSkipForward,
-  Volume
+  Mist,
+  Volume,
 } from '@vicons/tabler'
 import HeaderNav from "@/components/HeaderNav.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
-import {RouterLink} from "vue-router";
+import {RouterLink, useRoute} from "vue-router";
+import {useMessage} from "naive-ui";
+
+window.$message = useMessage()
+const route = useRoute()
 
 // 侧边栏菜单选项
 const menuOptions = [
@@ -36,7 +41,7 @@ const menuOptions = [
             RouterLink,
             {
               to: {
-                name: 'home',
+                name: 'discover',
               }
             },
             {default: () => '首页'}
@@ -69,7 +74,30 @@ const menuOptions = [
     icon: () => h(NIcon, null, {default: () => h(Heart)})
   },
   {
-    label: '设置',
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'mysonglists',
+              }
+            },
+            {default: () => '我的歌单'}
+        ),
+    key: 'mysonglists',
+    icon: () => h(NIcon, null, {default: () => h(Mist)})
+  },
+  {
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'settings',
+              }
+            },
+            {default: () => '设置'}
+        ),
     key: 'settings',
     icon: () => h(NIcon, null, {default: () => h(Settings)})
   }
@@ -77,6 +105,12 @@ const menuOptions = [
 
 const activeKey = ref('discover')
 const collapsed = ref(false)
+
+onMounted(() => {
+  setTimeout(() => {
+    activeKey.value = route.path.split('/')[1]
+  },100)
+})
 </script>
 
 <template>

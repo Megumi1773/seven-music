@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import {useUserStore} from "@/stores/user";
 import {Search, Settings} from "@vicons/tabler";
 import {NButton, NIcon, NInput, useMessage} from "naive-ui";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import AuthModal from "@/components/AuthModal.vue";
 
 const searchValue = ref('')
 const message = useMessage()
 const router = useRouter()
+const userStore = useUserStore()
+
+
 const dropDownList = [
   {
     label: '个人信息',
@@ -22,13 +27,18 @@ const handleSelect = (key: string) => {
   console.log(key)
   switch (key) {
     case '/profile':
-      // router.push('/profile')
+      router.push('/profile')
       message.info("跳转" + key)
       break
     case 'quit':
       message.success("退出登录")
+      userStore.logout()
       break
   }
+}
+const openModal = ref(false)
+const openLoginModal = () => {
+  openModal.value = !openModal.value
 }
 </script>
 
@@ -54,19 +64,21 @@ const handleSelect = (key: string) => {
     </div>
 
     <n-flex style="display: flex; align-items: center; gap: 12px;">
-      <n-dropdown trigger="hover" :options="dropDownList" @select="handleSelect">
+      <n-dropdown trigger="click" :options="dropDownList" @select="handleSelect" v-if="userStore.isLogin">
         <n-button circle quaternary>
           <n-avatar
               :style="{
-      color: 'yellow',
-      backgroundColor: 'red',
-    }"
+                  color: 'yellow',
+                  backgroundColor: 'red'
+           }"
           >
             M
           </n-avatar>
         </n-button>
       </n-dropdown>
-
+      <n-button type="primary" circle quaternary v-else @click="openLoginModal">
+        登录
+      </n-button>
       <n-button circle size="large" quaternary>
         <n-icon>
           <settings/>
@@ -74,6 +86,11 @@ const handleSelect = (key: string) => {
       </n-button>
     </n-flex>
   </n-flex>
+
+  <!--  登录弹窗-->
+  <n-modal v-model:show="openModal">
+    <AuthModal @loginSuccess="openModal =!openModal"></AuthModal>
+  </n-modal>
 </template>
 
 <style scoped>

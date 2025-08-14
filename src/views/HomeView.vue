@@ -1,6 +1,7 @@
 <script setup>
-
+import { HeartOutline, CaretForwardOutline } from '@vicons/ionicons5'
 // 轮播图数据
+
 const banners = [
   {
     id: 1,
@@ -159,7 +160,7 @@ const favoriteSong = (song, index) => {
     <!-- 轮播图区域 -->
     <div class="banner-container" :style="{ marginBottom: '30px' }">
       <n-carousel :style="{ width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden' }" autoplay
-        interval="5000" indicator-placement="bottom">
+                  :interval="5000" indicator-placement="bottom">
         <n-carousel-item v-for="banner in banners" :key="banner.id">
           <div :style="{
             width: '100%',
@@ -173,10 +174,11 @@ const favoriteSong = (song, index) => {
             padding: '0 40px'
           }">
             <h3
-              :style="{ color: '#fff', fontSize: '24px', marginBottom: '10px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }">
+                :style="{ color: '#fff', fontSize: '24px', marginBottom: '10px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }">
               {{ banner.title }}</h3>
             <p :style="{ color: '#fff', fontSize: '16px', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }">{{
-              banner.description }}</p>
+                banner.description
+              }}</p>
           </div>
         </n-carousel-item>
       </n-carousel>
@@ -185,30 +187,29 @@ const favoriteSong = (song, index) => {
     <!-- 推荐歌单区域 -->
     <div class="section-container" :style="{ marginBottom: '30px' }">
       <div class="section-header"
-        :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
+           :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
         <h2 :style="{ fontSize: '20px', fontWeight: 'bold', color: '#333' }">推荐歌单</h2>
         <div class="section-more"
-          :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
+             :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
           <span>更多</span>
-          <n-icon :component="ChevronRight" :size="16" style="marginLeft: '5px'" />
+          <n-icon :component="CaretForwardOutline"></n-icon>
         </div>
       </div>
 
       <div class="playlist-grid"
-        :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }">
+           :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }">
         <n-card v-for="playlist in recommendedPlaylists" :key="playlist.id"
-          :style="{ borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s', cursor: 'pointer' }" hoverable>
+                :style="{ borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s', cursor: 'pointer' }"
+                hoverable>
           <div slot="cover" :style="{ position: 'relative' }">
-            <img :src="playlist.cover" alt="歌单封面" :style="{ width: '100%', height: '180px', objectFit: 'cover' }" />
+            <img :src="playlist.cover" alt="歌单封面" :style="{ width: '100%', height: '180px', objectFit: 'cover' }"/>
             <div
-              :style="{ position: 'absolute', bottom: '0', left: '0', right: '0', background: 'linear-gradient(transparent, rgba(0,0,0,0.5))', padding: '10px' }">
-              <n-icon :component="Play" :size="20"
-                :style="{ color: '#fff', background: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '3px' }" />
+                :style="{ position: 'absolute', bottom: '0', left: '0', right: '0', background: 'linear-gradient(transparent, rgba(0,0,0,0.5))', padding: '10px' }">
             </div>
           </div>
           <div :style="{ padding: '10px' }">
             <h3
-              :style="{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
+                :style="{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
               {{ playlist.title }}</h3>
             <p :style="{ fontSize: '12px', color: '#888' }">{{ playlist.creator }} · {{ playlist.songCount }}首</p>
           </div>
@@ -219,18 +220,18 @@ const favoriteSong = (song, index) => {
     <!-- 最新音乐区域 -->
     <div class="section-container" :style="{ marginBottom: '30px' }">
       <div class="section-header"
-        :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
+           :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
         <h2 :style="{ fontSize: '20px', fontWeight: 'bold', color: '#333' }">最新音乐</h2>
         <div class="section-more"
-          :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
+             :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
           <span>更多</span>
-          <n-icon :component="ChevronRight" :size="16" style="marginLeft: '5px'" />
+          <n-icon :component="CaretForwardOutline"></n-icon>
         </div>
       </div>
 
       <div class="song-list" :style="{ backgroundColor: '#fff', borderRadius: '8px', overflow: 'hidden' }">
         <div
-          :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', fontWeight: 'bold', color: '#666' }">
+            :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', fontWeight: 'bold', color: '#666' }">
           <div>序号</div>
           <div>歌曲</div>
           <div>歌手</div>
@@ -238,18 +239,16 @@ const favoriteSong = (song, index) => {
         </div>
 
         <div v-for="(song, index) in latestSongs" :key="song.id"
-          :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', alignItems: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }"
-          :class="{ 'hover:bg-gray-50': true }" @click="playSong(song)">
+             :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', alignItems: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }"
+             :class="{ 'hover:bg-gray-50': true }" @click="playSong(song)">
           <div :style="{ color: '#999' }">{{ index + 1 }}</div>
           <div :style="{ display: 'flex', alignItems: 'center' }">
-            <n-icon :component="Play" :size="16" :style="{marginRight: '10px', color: '#999', visibility: 'hidden'}"
-              class="play-icon" />
             <span>{{ song.title }}</span>
           </div>
           <div>{{ song.artist }}</div>
           <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
             <span>{{ song.duration }}</span>
-            <n-icon :component="Heart" :size="16" style="color: '#999'" @click.stop="favoriteSong(song, index)" />
+            <n-icon :component="HeartOutline" @click.stop="favoriteSong(song,index)"></n-icon>
           </div>
         </div>
       </div>
@@ -258,22 +257,22 @@ const favoriteSong = (song, index) => {
     <!-- 热门歌手区域 -->
     <div class="section-container">
       <div class="section-header"
-        :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
+           :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
         <h2 :style="{ fontSize: '20px', fontWeight: 'bold', color: '#333' }">热门歌手</h2>
         <div class="section-more"
-          :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
+             :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
           <span>更多</span>
-          <n-icon :component="ChevronRight" :size="16" style="marginLeft: '5px'" />
+          <n-icon :component="CaretForwardOutline"></n-icon>
         </div>
       </div>
 
       <div class="singer-list"
-        :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '20px' }">
+           :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '20px' }">
         <div v-for="singer in hotSingers" :key="singer.id"
-          :style="{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }">
+             :style="{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }">
           <div
-            :style="{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }">
-            <img :src="singer.avatar" alt="歌手头像" :style="{ width: '100%', height: '100%', objectFit: 'cover' }" />
+              :style="{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }">
+            <img :src="singer.avatar" alt="歌手头像" :style="{ width: '100%', height: '100%', objectFit: 'cover' }"/>
           </div>
           <h3 :style="{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }">{{ singer.name }}</h3>
           <p :style="{ fontSize: '12px', color: '#888' }">{{ singer.songCount }}首歌曲</p>
@@ -310,9 +309,9 @@ const favoriteSong = (song, index) => {
 }
 
 /* 歌曲列表悬停效果 */
-.song-list>div:hover .play-icon {
+.song-list > div:hover .play-icon {
   visibility: visible !important;
-  color: '#1890ff' !important;
+  color: #1890ff !important;
 }
 
 /* 歌手列表样式 */
