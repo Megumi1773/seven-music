@@ -23,7 +23,7 @@ const goDetail = (id) =>{
 
   <n-flex>
     <n-flex justify="center" size="large">
-      <n-flex v-for="(song,index) in songlist" :key="song.id" @click.stop="goDetail(song.id)"
+      <n-flex v-for="song in songlist" :key="song.id" @click.stop="goDetail(song.id)"
               class="max-w-48 group hover:scale-105 transition-transform duration-300 cursor-pointer">
         <div class="relative w-full rounded-xl overflow-hidden" style="aspect-ratio: 1/1;">
           <n-image preview-disabled class="w-full h-full object-cover"
