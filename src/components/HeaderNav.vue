@@ -65,7 +65,11 @@ const openLoginModal = () => {
 
     <n-flex style="display: flex; align-items: center; gap: 12px;">
       <n-dropdown trigger="click" :options="dropDownList" @select="handleSelect" v-if="userStore.isLogin">
-        <n-button circle quaternary>
+        <n-button circle quaternary v-if="userStore.userInfo.avatar">
+          <n-avatar :src="userStore.userInfo.avatar">
+          </n-avatar>
+        </n-button>
+        <n-button circle quaternary v-else>
           <n-avatar
               :style="{
                   color: 'yellow',

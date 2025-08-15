@@ -131,7 +131,7 @@ onMounted(() => {
           show-trigger
           @collapse="collapsed = true"
           @expand="collapsed = false"
-          style="background-color: #f8f8f9;"
+          style="background-color: #FFF;"
       >
         <n-menu
             v-model:value="activeKey"
@@ -142,7 +142,7 @@ onMounted(() => {
       </n-layout-sider>
 
       <!-- 主内容区域 -->
-      <n-layout-content content-style="padding: 24px; background-color: #fafafc;">
+      <n-layout-content content-style="padding: 24px; background-color: whitesmoke;">
         <slot></slot>
       </n-layout-content>
     </n-layout>
