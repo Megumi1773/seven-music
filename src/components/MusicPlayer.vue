@@ -9,7 +9,7 @@ import {
   Playlist
 } from "@vicons/tabler";
 import {NButton, NIcon} from "naive-ui";
-import {onMounted, ref, useTemplateRef} from "vu
+import {useTemplateRef} from "vue"
 import {storeToRefs} from 'pinia'
 import {usePlayerStore} from '@/stores/player'
 import {useMediaControls} from "@vueuse/core";
