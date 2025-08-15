@@ -17,6 +17,9 @@ importers:
       '@vicons/tabler':
         specifier: ^0.13.0
         version: 0.13.0
+      '@vueuse/core':
+        specifier: ^13.6.0
+        version: 13.6.0(vue@3.5.18)
       axios:
         specifier: ^1.11.0
         version: 1.11.0
@@ -31,7 +34,7 @@ importers:
         version: 4.1.11
       unplugin-auto-import:
         specifier: ^20.0.0
-        version: 20.0.0
+        version: 20.0.0(@vueuse/core@13.6.0(vue@3.5.18))
       unplugin-vue-components:
         specifier: ^29.0.0
         version: 29.0.0(@babel/parser@7.28.0)(vue@3.5.18)
@@ -623,6 +626,9 @@ packages:
   '@types/lodash@4.17.20':
     resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
 
+  '@types/web-bluetooth@0.0.21':
+    resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
+
   '@vicons/ionicons5@0.13.0':
     resolution: {integrity: sha512-zvZKBPjEXKN7AXNo2Na2uy+nvuv6SP4KAMQxpKL2vfHMj0fSvuw7JZcOPCjQC3e7ayssKnaoFVAhbYcW6v41qQ==}
 
@@ -703,6 +709,19 @@ packages:
 
   '@vue/shared@3.5.18':
     resolution: {integrity: sha512-cZy8Dq+uuIXbxCZpuLd2GJdeSO/lIzIspC2WtkqIpje5QyFbvLaI5wZtdUjLHjGZrlVX6GilejatWwVYYRc8tA==}
+
+  '@vueuse/core@13.6.0':
+    resolution: {integrity: sha512-DJbD5fV86muVmBgS9QQPddVX7d9hWYswzlf4bIyUD2dj8GC46R1uNClZhVAmsdVts4xb2jwp1PbpuiA50Qee1A==}
+    peerDependencies:
+      vue: ^3.5.0
+
+  '@vueuse/metadata@13.6.0':
+    resolution: {integrity: sha512-rnIH7JvU7NjrpexTsl2Iwv0V0yAx9cw7+clymjKuLSXG0QMcLD0LDgdNmXic+qL0SGvgSVPEpM9IDO/wqo1vkQ==}
+
+  '@vueuse/shared@13.6.0':
+    resolution: {integrity: sha512-pDykCSoS2T3fsQrYqf9SyF0QXWHmcGPQ+qiOVjlYSzlWd9dgppB2bFSM1GgKKkt7uzn0BBMV3IbJsUfHG2+BCg==}
+    peerDependencies:
+      vue: ^3.5.0
 
   acorn@8.15.0:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
@@ -2003,6 +2022,8 @@ snapshots:
 
   '@types/lodash@4.17.20': {}
 
+  '@types/web-bluetooth@0.0.21': {}
+
   '@vicons/ionicons5@0.13.0': {}
 
   '@vicons/tabler@0.13.0': {}
@@ -2141,6 +2162,19 @@ snapshots:
       vue: 3.5.18
 
   '@vue/shared@3.5.18': {}
+
+  '@vueuse/core@13.6.0(vue@3.5.18)':
+    dependencies:
+      '@types/web-bluetooth': 0.0.21
+      '@vueuse/metadata': 13.6.0
+      '@vueuse/shared': 13.6.0(vue@3.5.18)
+      vue: 3.5.18
+
+  '@vueuse/metadata@13.6.0': {}
+
+  '@vueuse/shared@13.6.0(vue@3.5.18)':
+    dependencies:
+      vue: 3.5.18
 
   acorn@8.15.0: {}
 
@@ -2778,7 +2812,7 @@ snapshots:
       unplugin: 2.3.5
       unplugin-utils: 0.2.5
 
-  unplugin-auto-import@20.0.0:
+  unplugin-auto-import@20.0.0(@vueuse/core@13.6.0(vue@3.5.18)):
     dependencies:
       local-pkg: 1.1.1
       magic-string: 0.30.17
@@ -2786,6 +2820,8 @@ snapshots:
       unimport: 5.2.0
       unplugin: 2.3.5
       unplugin-utils: 0.2.5
+    optionalDependencies:
+      '@vueuse/core': 13.6.0(vue@3.5.18)
 
   unplugin-utils@0.2.5:
     dependencies:

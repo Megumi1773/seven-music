@@ -9,3 +9,7 @@ export const getPlaylistById = async (id) => {
 export const getPlayListSongs = async (id) => {
     return await request.get(`/playlists/${id}/songs`)
 }
+
+export const getSongUrl = async (id) => {
+    return await request.get(`/v1/songs/url/${id}`)
+}

@@ -15,6 +15,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "@vicons/ionicons5": "^0.13.0",
     "@vicons/tabler": "^0.13.0",
+    "@vueuse/core": "^13.6.0",
     "axios": "^1.11.0",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",

@@ -1,6 +1,5 @@
 import axios from "axios"
 
-let msg = window.$message
 
 const api = axios.create(
     {
@@ -8,15 +7,15 @@ const api = axios.create(
         timeout: 1000,
         headers: {
             "Content-Type": "application/json",
-        }
+        },
     }
 )
 // 添加请求拦截器
 api.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
     let user = JSON.parse(localStorage.getItem("User"))
-    let token = user.token
-    if (token) {
+    if (user) {
+        let token = user.token
         config.headers.Authorization = `Bearer ${token}`
     }
     return config;
@@ -35,7 +34,6 @@ api.interceptors.response.use(function (response) {
         // 对响应错误做点什么
         let errorMessage = '未知错误，请稍后再试！';
         let showMessage = true; // 是否显示错误消息给用户
-
         // 1. 请求已发出，但服务器响应状态码不在 2xx 范围内
         if (error.response) {
             const {status, data} = error.response;
@@ -88,10 +86,10 @@ api.interceptors.response.use(function (response) {
         }
 
         // 打印详细错误信息到控制台，便于调试
-        console.error('API Request Error:', error);
+        console.error('API Request Error:', error.response);
 
         // 如果需要显示错误消息给用户，则使用 Navi-ui 的 Message 组件
-        msg.error(errorMessage)
+        window.$message.error(errorMessage)
 
         // 重要的是：返回 Promise.reject(error)，这样调用者（例如你的组件）
         // 才能通过 .catch() 捕获到这个错误，并进行后续处理（如果需要）

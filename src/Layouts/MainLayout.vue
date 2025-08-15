@@ -1,5 +1,5 @@
 <script setup>
-import {ref, h} from 'vue'
+import {ref, h, useTemplateRef} from 'vue'
 import {
   NLayout,
   NLayoutSider,
@@ -11,7 +11,6 @@ import {
   NButton,
   NSpace,
   NIcon,
-
 } from 'naive-ui'
 import {
   Home,
@@ -29,6 +28,8 @@ import HeaderNav from "@/components/HeaderNav.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
 import {RouterLink, useRoute} from "vue-router";
 import {useMessage} from "naive-ui";
+import {usePlayerStore} from "@/stores/player.js";
+import {storeToRefs} from "pinia";
 
 window.$message = useMessage()
 const route = useRoute()
@@ -64,12 +65,30 @@ const menuOptions = [
     icon: () => h(NIcon, null, {default: () => h(Search)})
   },
   {
-    label: '音乐库',
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'musiclibary',
+              }
+            },
+            {default: () => '音乐库'}
+        ),
     key: 'library',
     icon: () => h(NIcon, null, {default: () => h(Book)})
   },
   {
-    label: '我喜欢的',
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'like',
+              }
+            },
+            {default: () => '我喜欢的'}
+        ),
     key: 'favorites',
     icon: () => h(NIcon, null, {default: () => h(Heart)})
   },
@@ -105,12 +124,19 @@ const menuOptions = [
 
 const activeKey = ref('discover')
 const collapsed = ref(false)
-
+const playerStore = usePlayerStore()
+const {playlists} = storeToRefs(playerStore)
+const playlistSongNumbers = computed(() => playlists.value.length)
 onMounted(() => {
   setTimeout(() => {
     activeKey.value = route.path.split('/')[1]
-  },100)
+  }, 100)
 })
+const showPlaylist = ref(false)
+const handleOpenList = () => {
+  showPlaylist.value = !showPlaylist.value
+}
+const M = useTemplateRef('drawerM')
 </script>
 
 <template>
@@ -142,16 +168,23 @@ onMounted(() => {
       </n-layout-sider>
 
       <!-- 主内容区域 -->
-      <n-layout-content content-style="padding: 24px; background-color: whitesmoke;">
+      <n-layout-content content-style="padding: 24px; background-color: whitesmoke;" ref="drawerM">
         <slot></slot>
+        <!-- 播放列表 抽屉-->
+        <n-drawer v-if="M" v-model:show="showPlaylist" :width="502" :to="M">
+          <n-drawer-content title="斯通纳">
+            《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+          </n-drawer-content>
+        </n-drawer>
       </n-layout-content>
     </n-layout>
-
     <!-- 底部播放器控制栏 -->
-    <n-layout-footer style="height: 80px; padding: 12px 24px; background-color: #fff; border-top: 1px solid #e0e0e0;">
-      <MusicPlayer></MusicPlayer>
+    <n-layout-footer style="height: 80px; padding: 12px 24px; background-color: #fff; border-top: 1px solid #e0e0e0;"
+                     v-if="playlistSongNumbers > 0">
+      <MusicPlayer @openPlayList="handleOpenList"></MusicPlayer>
     </n-layout-footer>
   </n-layout>
+
 </template>
 
 <style scoped>

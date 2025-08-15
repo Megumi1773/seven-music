@@ -17,19 +17,27 @@ const registerForm = ref({
 })
 const rules = ref({})
 const emit = defineEmits(["loginSuccess"])
+
+const loading = ref(false)
 const handleLogin = async () => {
-  let res = await Login({
-    username: loginForm.value.username,
-    password: loginForm.value.password,
-  })
-  console.log(res.data)
-  if (res.data.code === 200) {
-    userStore.setUserInfo(res.data.data.user)
-    userStore.setToken(res.data.data.token)
-    msg.success(res.data.message)
-    emit('loginSuccess')
+  try {
+    loading.value = true
+    let res = await Login({
+      username: loginForm.value.username,
+      password: loginForm.value.password,
+    })
+    if (res.data.code === 200) {
+      userStore.setUserInfo(res.data.data.user)
+      userStore.setToken(res.data.data.token)
+      msg.success(res.data.message)
+      emit('loginSuccess')
+    }
+  } finally {
+    loading.value = false
   }
 }
+
+
 </script>
 <template>
   <n-card :style="{width: '40%',maxWidth: '480px'}">
@@ -44,10 +52,12 @@ const handleLogin = async () => {
       <n-tab-pane name="signing" tab="登录">
         <n-form :model="loginForm" novalidate>
           <n-form-item-row label="用户名">
-            <n-input name="username" placeholder="请输入用户名" v-model:value="loginForm.username" :input-props="{ autocomplete: 'username' }" />
+            <n-input name="username" placeholder="请输入用户名" v-model:value="loginForm.username"
+                     :input-props="{ autocomplete: 'username' }"/>
           </n-form-item-row>
           <n-form-item-row label="密码">
-            <n-input name="password" placeholder="请输入密码" type="password" v-model:value="loginForm.password"  :input-props="{ autocomplete: 'current-password' }" />
+            <n-input name="password" placeholder="请输入密码" type="password" v-model:value="loginForm.password"
+                     :input-props="{ autocomplete: 'current-password' }"/>
           </n-form-item-row>
         </n-form>
         <pre>
@@ -56,20 +66,23 @@ const handleLogin = async () => {
           "password":{{ loginForm.password }}
           }
         </pre>
-        <n-button type="primary" block secondary strong @click="handleLogin">
+        <n-button type="primary" block secondary strong @click="handleLogin" :loading="loading">
           登录
         </n-button>
       </n-tab-pane>
       <n-tab-pane name="signup" tab="注册">
         <n-form :model="registerForm" novalidate>
           <n-form-item-row label="用户名">
-            <n-input name="regUsername" placeholder="请输入用户名" v-model:value="registerForm.username" :input-props="{ autocomplete: 'username' }" />
+            <n-input name="regUsername" placeholder="请输入用户名" v-model:value="registerForm.username"
+                     :input-props="{ autocomplete: 'username' }"/>
           </n-form-item-row>
           <n-form-item-row label="密码">
-            <n-input name="regPassword" placeholder="请输入密码" type="password" v-model:value="registerForm.password" :input-props="{ autocomplete: 'new-password' }"/>
+            <n-input name="regPassword" placeholder="请输入密码" type="password" v-model:value="registerForm.password"
+                     :input-props="{ autocomplete: 'new-password' }"/>
           </n-form-item-row>
           <n-form-item-row label="重复密码">
-            <n-input name="regRePassword" placeholder="请输入密码" type="password" v-model:value="registerForm.repassword" :input-props="{ autocomplete: 'new-password' }"/>
+            <n-input name="regRePassword" placeholder="请输入密码" type="password"
+                     v-model:value="registerForm.repassword" :input-props="{ autocomplete: 'new-password' }"/>
           </n-form-item-row>
         </n-form>
         <pre>
