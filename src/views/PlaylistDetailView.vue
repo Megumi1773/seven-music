@@ -124,7 +124,7 @@ const rowClick = (song: any) => ({
   style: 'cursor: pointer;',
   ondblclick: () => {
     playerStore.play(song)
-    playerStore.addPlaylist(song)
+    playerStore.addPlaylist(playlistSongs.value)
   }
 })
 </script>

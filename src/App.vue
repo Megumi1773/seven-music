@@ -3,13 +3,13 @@ import MainLayout from './Layouts/MainLayout.vue';
 </script>
 
 <template>
-  <n-config-provider>
-    <n-message-provider>
-      <MainLayout>
-        <router-view></router-view>
-      </MainLayout>
-    </n-message-provider>
-  </n-config-provider>
+    <n-config-provider>
+      <n-message-provider>
+        <MainLayout>
+          <router-view></router-view>
+        </MainLayout>
+      </n-message-provider>
+    </n-config-provider>
 </template>
 
 <style>

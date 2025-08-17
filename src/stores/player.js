@@ -20,12 +20,19 @@ export const usePlayerStore = defineStore('player', () => {
         currentSong.value.url = data.data
     }
 
-    const playlists = ref([])
+    const playlists = ref()
 
-    function addPlaylist(...songs) {
-        playlists.value.push(...songs)
+    function addPlaylist(songs) {
+        if (Array.isArray(songs)) {
+            playlists.value = songs
+        } else {
+            playlists.value.push(songs)
+        }
+    }
 
-        console.log(playlists.value)
+    function removePlaylist(id) {
+        playlists.value = playlists.value.filter(item => item.id !== id)
+        window.$message.success("删除成功")
     }
 
     return {
@@ -33,7 +40,8 @@ export const usePlayerStore = defineStore('player', () => {
         playlists,
         play,
         addPlaylist,
+        removePlaylist
     }
-},{
+}, {
     persist: true,
 })

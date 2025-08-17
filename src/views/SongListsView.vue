@@ -46,9 +46,9 @@ const goDetail = (id) =>{
       </n-flex>
     </n-flex>
   </n-flex>
-  <pre class="text-xl">
-  {{ data }}
-</pre>
+<!--  <pre class="text-xl">-->
+  <!--  {{ data }}-->
+  <!--</pre>-->
 </template>
 
 <style scoped>
