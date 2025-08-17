@@ -1,4 +1,6 @@
 import axios from "axios"
+import {useUserStore} from "@/stores/user.js";
+import {useRouter} from "vue-router";
 
 
 const api = axios.create(

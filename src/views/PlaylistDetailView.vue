@@ -192,15 +192,15 @@ const rowClick = (song: any) => ({
       :row-props="rowClick"
       striped
   />
-  <pre>
-歌单ID:{{ playlistId }}
-歌单信息:{
-  {{ playlistDetail }}
-  }
-歌单歌曲：{
-  {{ playlistSongs }}
-  }
-</pre>
+<!--  <pre>-->
+<!--歌单ID:{{ playlistId }}-->
+<!--歌单信息:{-->
+<!--  {{ playlistDetail }}-->
+<!--  }-->
+<!--歌单歌曲：{-->
+<!--  {{ playlistSongs }}-->
+<!--  }-->
+<!--</pre>-->
 </template>
 
 <style scoped>

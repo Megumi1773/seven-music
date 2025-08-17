@@ -1,9 +1,18 @@
 import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import {Logout} from "@/api/user.js";
+import {useRouter} from "vue-router";
 
 export const useUserStore = defineStore('User', () => {
-        const userInfo = ref({})
+        const userInfo = ref({
+            ID: '',
+            username: '',
+            nickname: '',
+            phone: '',
+            email: '',
+            avatar: ''
+        })
+        const router = useRouter()
         const token = ref('')
         const isLogin = computed(() => token.value !== '')
 
@@ -32,11 +41,11 @@ export const useUserStore = defineStore('User', () => {
         }
 
         const logout = async () => {
-            setUserInfo({})
-            setToken('')
-            localStorage.removeItem('User')
-            window.location.reload()
             await Logout()
+            await setUserInfo({})
+            await setToken('')
+            await localStorage.removeItem('User')
+            await router.push('/')
         }
 
         return {

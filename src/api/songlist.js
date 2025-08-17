@@ -13,3 +13,7 @@ export const getPlayListSongs = async (id) => {
 export const getSongUrl = async (id) => {
     return await request.get(`/v1/songs/url/${id}`)
 }
+
+export const createNewPlaylist = async (data) => {
+    return await request.post(`/playlists/`, data)
+}

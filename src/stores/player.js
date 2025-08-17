@@ -20,7 +20,7 @@ export const usePlayerStore = defineStore('player', () => {
         currentSong.value.url = data.data
     }
 
-    const playlists = ref()
+    const playlists = ref([])
 
     function addPlaylist(songs) {
         if (Array.isArray(songs)) {
