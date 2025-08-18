@@ -1,5 +1,5 @@
 <script setup>
-import {ref, h, useTemplateRef, computed, onMounted} from 'vue'
+import {ref, h, computed, onMounted} from 'vue'
 import {
   NLayout,
   NLayoutSider,
@@ -7,9 +7,7 @@ import {
   NLayoutContent,
   NLayoutFooter,
   NMenu,
-  NInput,
   NButton,
-  NSpace,
   NIcon, NFlex, NImage,
 } from 'naive-ui'
 import {
@@ -18,12 +16,8 @@ import {
   Book,
   Heart,
   Settings,
-  PlayerPlay,
-  PlayerSkipBack,
-  PlayerSkipForward,
   Mist,
-  Volume,
-  Trash, PlayerPause,
+  Trash,
 } from '@vicons/tabler'
 import {Play} from '@vicons/ionicons5'
 import HeaderNav from "@/components/HeaderNav.vue";

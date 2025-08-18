@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import {getPlaylistById, getPlayListSongs} from '@/api/songlist'
-import {ref, h, computed, watch, watchEffect} from "vue";
+import {ref, h, watch} from "vue";
 import {NIcon, useMessage} from "naive-ui"
 import {Heart, Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
@@ -219,9 +219,3 @@ watch(
   <!--  }-->
   <!--</pre>-->
 </template>
-
-<style scoped>
-:deep(.n-image) {
-  max-width: calc(var(--spacing) * 48);
-}
-</style>
