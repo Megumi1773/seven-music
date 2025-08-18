@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useRoute, useRouter} from "vue-router";
 import {getPlaylistById, getPlayListSongs} from '@/api/songlist'
-import {ref, h, computed} from "vue";
+import {ref, h, computed, watch, watchEffect} from "vue";
 import {NIcon, useMessage} from "naive-ui"
 import {Heart, Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
@@ -11,13 +11,19 @@ const defaultAvatar =
 
 let msg = useMessage()
 const route = useRoute()
-let playlistId = route.params.id
-const playlistDetail = ref({})
+let playlistId = ref(route.params.id)
+const playlistDetail = ref({
+  name: '',
+  cover: '',
+  nickname: '',
+  user_avatar: '',
+  created_at: ''
+})
 const playlistSongs = ref([])
 const loading = ref(false)
 const getPlaylistDetail = async () => {
   loading.value = true
-  let a = await getPlaylistById(playlistId)
+  let a = await getPlaylistById(playlistId.value)
   playlistDetail.value = a.data.data
   if (a.data.code === 200) {
     msg.success(a.data.message)
@@ -26,7 +32,7 @@ const getPlaylistDetail = async () => {
 }
 const getPlaylistSong = async () => {
   loading.value = true
-  let b = await getPlayListSongs(playlistId)
+  let b = await getPlayListSongs(playlistId.value)
   playlistSongs.value = b.data.data
   if (b.data.code === 200) {
     msg.success(b.data.message)
@@ -38,10 +44,10 @@ getPlaylistSong()
 
 const columns = [
   {
-    title: "##",
+    title: "#",
     key: "id",
     render(row: any, index: number) {
-      return h('div', index + 1)
+      return h('div', {style: {width: '26px'}}, index + 1)
     }
   },
   {
@@ -52,7 +58,8 @@ const columns = [
         style: {
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
+          width: '400px',
         }
       }, [
         // 专辑封面图片
@@ -127,6 +134,16 @@ const rowClick = (song: any) => ({
     playerStore.addPlaylist(playlistSongs.value)
   }
 })
+
+watch(
+    () => route.params.id,
+    (newId) => {
+      playlistId.value = newId
+      getPlaylistDetail()
+      getPlaylistSong()
+    },
+    {immediate: true}
+)
 </script>
 
 <template>
@@ -192,15 +209,15 @@ const rowClick = (song: any) => ({
       :row-props="rowClick"
       striped
   />
-<!--  <pre>-->
-<!--歌单ID:{{ playlistId }}-->
-<!--歌单信息:{-->
-<!--  {{ playlistDetail }}-->
-<!--  }-->
-<!--歌单歌曲：{-->
-<!--  {{ playlistSongs }}-->
-<!--  }-->
-<!--</pre>-->
+  <!--  <pre>-->
+  <!--歌单ID:{{ playlistId }}-->
+  <!--歌单信息:{-->
+  <!--  {{ playlistDetail }}-->
+  <!--  }-->
+  <!--歌单歌曲：{-->
+  <!--  {{ playlistSongs }}-->
+  <!--  }-->
+  <!--</pre>-->
 </template>
 
 <style scoped>

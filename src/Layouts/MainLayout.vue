@@ -1,5 +1,5 @@
 <script setup>
-import {ref, h, useTemplateRef} from 'vue'
+import {ref, h, useTemplateRef, computed, onMounted} from 'vue'
 import {
   NLayout,
   NLayoutSider,
@@ -28,17 +28,16 @@ import {
 import {Play} from '@vicons/ionicons5'
 import HeaderNav from "@/components/HeaderNav.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
-import {RouterLink, useRoute} from "vue-router";
+import {RouterLink, useRoute, useRouter} from "vue-router";
 import {useMessage} from "naive-ui";
 import {usePlayerStore} from "@/stores/player.js";
 import {storeToRefs} from "pinia";
 import {getPlaylistById, getPlaylists} from "@/api/songlist.js";
-
+const router = useRouter();
 window.$message = useMessage()
 const route = useRoute()
 // 获取用户歌单
 const songList = ref([])
-const up = computed(() => songList.value)
 const getUserPlaylist = async () => {
   let res = await getPlaylists()
   if (res.data.code === 200) {
@@ -110,14 +109,32 @@ const menuOptions = computed(() => [
     label: "我的歌单",
     key: 'mysonglists',
     icon: () => h(NIcon, null, {default: () => h(Mist)}),
-    children: up.value.map(p => ({
+    children: songList.value.map(p => ({
       key: p.id,
-      render: () =>
-          h('div', {style: {display: 'flex', alignItems: 'center', gap: '8px'}},
-              [
-                h('img', {src: p.cover, style: {width: 24, height: 24, borderRadius: 4}}),
-                p.name
-              ])
+      label: () =>
+          h(
+              NFlex,
+              {
+                align: 'center', justify: 'center', wrap: false,
+                onClick:()=>{
+                  router.push(`/playlist/${p.id}`)
+                }
+              },
+
+              {
+                default: () => [
+                  h(NImage, {
+                    src: p.cover,
+                    width: 36,
+                    height: 36,
+                    previewDisabled: true,
+                    style: {borderRadius: '4px', flexShrink: 0, objectFit: 'cover'}
+                  }),
+                  h('p', p.name)
+                ]
+              },
+          )
+
     }))
   },
   {
