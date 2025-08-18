@@ -10,7 +10,7 @@ import {
   NInput,
   NButton,
   NSpace,
-  NIcon,
+  NIcon, NFlex, NImage,
 } from 'naive-ui'
 import {
   Home,
@@ -36,9 +36,20 @@ import {getPlaylistById, getPlaylists} from "@/api/songlist.js";
 
 window.$message = useMessage()
 const route = useRoute()
+// 获取用户歌单
+const songList = ref([])
+const up = computed(() => songList.value)
+const getUserPlaylist = async () => {
+  let res = await getPlaylists()
+  if (res.data.code === 200) {
+    songList.value = res.data.data
+  } else {
+    songList.value = []
+  }
+}
 
 // 侧边栏菜单选项
-const menuOptions = [
+const menuOptions = computed(() => [
   {
     label: () =>
         h(
@@ -98,17 +109,16 @@ const menuOptions = [
   {
     label: "我的歌单",
     key: 'mysonglists',
-    children: [
-      {
-        label: '叙事者',
-        key: 'narrator'
-      },
-      {
-        label: '羊男',
-        key: 'sheep-man'
-      }
-    ],
     icon: () => h(NIcon, null, {default: () => h(Mist)}),
+    children: up.value.map(p => ({
+      key: p.id,
+      render: () =>
+          h('div', {style: {display: 'flex', alignItems: 'center', gap: '8px'}},
+              [
+                h('img', {src: p.cover, style: {width: 24, height: 24, borderRadius: 4}}),
+                p.name
+              ])
+    }))
   },
   {
     label: () =>
@@ -124,7 +134,7 @@ const menuOptions = [
     key: 'settings',
     icon: () => h(NIcon, null, {default: () => h(Settings)})
   }
-]
+])
 
 const activeKey = ref('discover')
 const collapsed = ref(false)
@@ -152,16 +162,7 @@ const formatPlayerTime = (v) => {
   return `${m}:${s}`
 }
 
-// 获取用户歌单
-const userplaylists = ref([])
-const getUserPlaylist = async () => {
-  let res = await getPlaylists()
-  if (res.data.code === 200) {
-    userplaylists.value = res.data.data
-  } else {
-    userplaylists.value = []
-  }
-}
+
 </script>
 
 <template>
