@@ -295,20 +295,6 @@ const formatPlayerTime = (v) => {
 </template>
 
 <style scoped>
-.n-layout-header {
-  z-index: 1;
-  background-color: #fff;
-}
-
-.n-layout-footer {
-  z-index: 1;
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.09);
-}
-
-.n-layout-sider {
-  box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.09);
-}
-
 .playlist {
   padding: 0 12px;
 }
@@ -338,14 +324,6 @@ const formatPlayerTime = (v) => {
   width: 80px;
   flex-shrink: 0;
 }
-
-.index {
-  width: 24px;
-  text-align: center;
-  font-size: 14px;
-  color: #999;
-}
-
 .cover {
   width: 48px;
   height: 48px;
