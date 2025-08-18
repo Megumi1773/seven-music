@@ -11,3 +11,7 @@ export const getUserInfo = async () => {
 export const Logout = async () => {
     return await request.post('/user/logout')
 }
+
+export const updateProfile = async (data) => {
+    return await request.put('/user/info', data)
+}

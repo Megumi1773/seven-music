@@ -37,7 +37,6 @@ const handleLogin = async () => {
   }
 }
 
-
 </script>
 <template>
   <n-card :style="{width: '40%',maxWidth: '480px'}">

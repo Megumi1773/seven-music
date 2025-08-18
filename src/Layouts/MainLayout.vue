@@ -32,6 +32,7 @@ import {RouterLink, useRoute} from "vue-router";
 import {useMessage} from "naive-ui";
 import {usePlayerStore} from "@/stores/player.js";
 import {storeToRefs} from "pinia";
+import {getPlaylistById, getPlaylists} from "@/api/songlist.js";
 
 window.$message = useMessage()
 const route = useRoute()
@@ -95,18 +96,19 @@ const menuOptions = [
     icon: () => h(NIcon, null, {default: () => h(Heart)})
   },
   {
-    label: () =>
-        h(
-            RouterLink,
-            {
-              to: {
-                name: 'mysonglists',
-              }
-            },
-            {default: () => '我的歌单'}
-        ),
+    label: "我的歌单",
     key: 'mysonglists',
-    icon: () => h(NIcon, null, {default: () => h(Mist)})
+    children: [
+      {
+        label: '叙事者',
+        key: 'narrator'
+      },
+      {
+        label: '羊男',
+        key: 'sheep-man'
+      }
+    ],
+    icon: () => h(NIcon, null, {default: () => h(Mist)}),
   },
   {
     label: () =>
@@ -133,6 +135,7 @@ onMounted(() => {
   setTimeout(() => {
     activeKey.value = route.path.split('/')[1]
   }, 100)
+  getUserPlaylist()
 })
 const showPlaylist = ref(false)
 const handleOpenList = () => {
@@ -147,6 +150,17 @@ const formatPlayerTime = (v) => {
   const m = Math.floor(v / 60).toString().padStart(2, "0")
   const s = Math.floor(v % 60).toString().padStart(2, '0')
   return `${m}:${s}`
+}
+
+// 获取用户歌单
+const userplaylists = ref([])
+const getUserPlaylist = async () => {
+  let res = await getPlaylists()
+  if (res.data.code === 200) {
+    userplaylists.value = res.data.data
+  } else {
+    userplaylists.value = []
+  }
 }
 </script>
 
@@ -238,7 +252,7 @@ const formatPlayerTime = (v) => {
                   class="absolute"
                   style="left: -50%;transform: translateX(25%)"
               >
-                <Play />
+                <Play/>
               </n-icon>
             </div>
 

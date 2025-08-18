@@ -56,7 +56,6 @@ const emits = defineEmits(['openPlayList'])
         <div style="font-size: 12px; color: #666;">{{ song.artist_name || '作者' }}</div>
       </div>
     </div>
-
     <!-- 播放控制 -->
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div style="display: flex; align-items: center; gap: 16px;">

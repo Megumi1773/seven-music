@@ -77,14 +77,14 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="mb-8">
+  <n-card class="mb-8">
     <n-flex align="center" :size="24">
-      <n-avatar
-          v-if="userInfo?.avatar"
-          :size="80"
-          :src="userInfo.avatar"
-          round
-      />
+<!--      <n-avatar-->
+<!--          v-if="userInfo?.avatar"-->
+<!--          :size="80"-->
+<!--          :src="userInfo.avatar"-->
+<!--          round-->
+<!--      />-->
       <n-flex justify="space-between" class="w-full">
         <n-flex align="center" vertical class="mb-5">
           <h1 class="text-3xl font-bold mb-1">我的歌单</h1>
@@ -110,7 +110,45 @@ onMounted(() => {
         </n-button-group>
       </n-flex>
     </n-flex>
-  </div>
+    <n-spin :show="loading" size="large">
+      <n-empty v-if="!loading && songlist.length === 0" description="暂无歌单">
+        <template #extra>
+          <n-button type="primary" @click="showNewPlaylist">
+            <template #icon>
+              <AddOutline/>
+            </template>
+            创建歌单
+          </n-button>
+        </template>
+      </n-empty>
+
+      <n-grid v-else :cols="6" :x-gap="24" :y-gap="24">
+        <n-grid-item v-for="song in songlist" :key="song.id">
+          <div @click="goDetail(song.id)" class="group cursor-pointer">
+            <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
+              <n-image
+                  preview-disabled
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  :src="song.cover || 'https://imgapi.xl0408.top/index.php'"
+              />
+              <div
+                  class="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-all duration-300 flex items-center justify-center pointer-events-none z-10">
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <svg class="h-12 w-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-medium text-sm truncate">{{ song.name }}</h3>
+              <p class="text-xs text-gray-500">{{ song.nickname }}</p>
+            </div>
+          </div>
+        </n-grid-item>
+      </n-grid>
+    </n-spin>
+  </n-card>
   <!--  新建歌单弹窗-->
   <n-modal
       v-model:show="show"
@@ -158,53 +196,16 @@ onMounted(() => {
       </n-form-item>
 
     </n-form>
-    <pre>
-      {
-  name: {{ addPlaylist.name }},
-  cover: {{ addPlaylist.cover }},  #可选
-  description: {{ addPlaylist.description }}, #可选
-  isPublic: {{ addPlaylist.isPublic }}, #可选
-}
-    </pre>
+<!--    <pre>-->
+<!--      {-->
+<!--  name: {{ addPlaylist.name }},-->
+<!--  cover: {{ addPlaylist.cover }},  #可选-->
+<!--  description: {{ addPlaylist.description }}, #可选-->
+<!--  isPublic: {{ addPlaylist.isPublic }}, #可选-->
+<!--}-->
+<!--    </pre>-->
   </n-modal>
-  <n-spin :show="loading" size="large">
-    <n-empty v-if="!loading && songlist.length === 0" description="暂无歌单">
-      <template #extra>
-        <n-button type="primary" @click="showNewPlaylist">
-          <template #icon>
-            <AddOutline/>
-          </template>
-          创建歌单
-        </n-button>
-      </template>
-    </n-empty>
 
-    <n-grid v-else :cols="6" :x-gap="24" :y-gap="24">
-      <n-grid-item v-for="song in songlist" :key="song.id">
-        <div @click="goDetail(song.id)" class="group cursor-pointer">
-          <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
-            <n-image
-                preview-disabled
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                :src="song.cover || 'https://imgapi.xl0408.top/index.php'"
-            />
-            <div
-                class="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-all duration-300 flex items-center justify-center pointer-events-none z-10">
-              <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <svg class="h-12 w-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3 class="font-medium text-sm truncate">{{ song.name }}</h3>
-            <p class="text-xs text-gray-500">{{ song.nickname }}</p>
-          </div>
-        </div>
-      </n-grid-item>
-    </n-grid>
-  </n-spin>
   <!--  <pre class="text-xl">-->
   <!--  {{ data }}-->
   <!--</pre>-->
