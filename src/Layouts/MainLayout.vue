@@ -26,7 +26,8 @@ import {RouterLink, useRoute, useRouter} from "vue-router";
 import {useMessage} from "naive-ui";
 import {usePlayerStore} from "@/stores/player.js";
 import {storeToRefs} from "pinia";
-import {getPlaylistById, getPlaylists} from "@/api/songlist.js";
+import {getPlaylists} from "@/api/songlist.js";
+
 const router = useRouter();
 window.$message = useMessage()
 const route = useRoute()
@@ -110,7 +111,7 @@ const menuOptions = computed(() => [
               NFlex,
               {
                 align: 'center', justify: 'center', wrap: false,
-                onClick:()=>{
+                onClick: () => {
                   router.push(`/playlist/${p.id}`)
                 }
               },
@@ -324,6 +325,7 @@ const formatPlayerTime = (v) => {
   width: 80px;
   flex-shrink: 0;
 }
+
 .cover {
   width: 48px;
   height: 48px;
