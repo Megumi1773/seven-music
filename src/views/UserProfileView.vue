@@ -3,7 +3,7 @@ import {getUserInfo, updateProfile} from '@/api/user'
 import {onMounted, ref, reactive} from "vue";
 import {useMessage} from 'naive-ui'
 import {User, Mail, Phone, Edit, Camera} from '@vicons/tabler'
-import SongListsView from "@/views/SongListsView.vue";
+import SongListsView from "@/components/SongListsView.vue";
 
 const message = useMessage()
 let originalData = ref()

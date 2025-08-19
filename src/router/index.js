@@ -18,14 +18,24 @@ const router = createRouter({
             component: () => import('@/views/SearchView.vue')
         },
         {
-            path: '/profile',
-            name: 'profile',
-            component: () => import('@/views/ProfileView.vue')
+            path: '/userprofile',
+            name: 'userprofile',
+            component: () => import('@/views/UserProfileView.vue')
+        },
+        {
+            path: '/artistprofile/:id',
+            name: 'artistprofile',
+            component: () => import('@/views/ArtistProfile.vue')
+        },
+        {
+            path: '/everyday',
+            name: 'everyday',
+            component: () => import('@/views/EverDayView.vue')
         },
         {
             path: '/mysonglists',
             name: 'mysonglists',
-            component: () => import('@/views/SongListsView.vue')
+            component: () => import('@/components/SongListsView.vue')
         },
         {
             path: '/musiclibary',

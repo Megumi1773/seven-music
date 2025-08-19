@@ -46,7 +46,9 @@ api.interceptors.response.use(function (response) {
                 case 401:
                     errorMessage = data.message || '登录状态已过期，请重新登录！';
                     // 可以在这里清空 token 并跳转到登录页
-                    // localStorage.removeItem('token');
+                    localStorage.removeItem('User');
+                    localStorage.removeItem('player');
+
                     // router.push('/login'); // 如果你需要路由跳转，需要在这里导入 router
                     break;
                 case 403:

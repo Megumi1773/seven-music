@@ -36,7 +36,7 @@ const songList = ref([])
 const getUserPlaylist = async () => {
   let res = await getPlaylists()
   if (res.data.code === 200) {
-    songList.value = res.data.data
+    songList.value = res.data.data || []
   } else {
     songList.value = []
   }
@@ -101,7 +101,7 @@ const menuOptions = computed(() => [
     icon: () => h(NIcon, null, {default: () => h(Heart)})
   },
   {
-    label: "我的歌单",
+    label: () => h(RouterLink, {to: {name: 'mysonglists'}}, {default: () => '我的歌单'}),
     key: 'mysonglists',
     icon: () => h(NIcon, null, {default: () => h(Mist)}),
     children: songList.value.map(p => ({
@@ -109,27 +109,20 @@ const menuOptions = computed(() => [
       label: () =>
           h(
               NFlex,
-              {
-                align: 'center', justify: 'center', wrap: false,
-                onClick: () => {
-                  router.push(`/playlist/${p.id}`)
-                }
-              },
-
+              {align: 'center', gap: '8px', onClick: () => router.push(`/playlist/${p.id}`)},
               {
                 default: () => [
                   h(NImage, {
-                    src: p.cover,
+                    src: p.cover || 'https://imgapi.xl0408.top/index.php',
                     width: 36,
                     height: 36,
                     previewDisabled: true,
-                    style: {borderRadius: '4px', flexShrink: 0, objectFit: 'cover'}
+                    style: {borderRadius: '4px', objectFit: 'cover'}
                   }),
-                  h('p', p.name)
+                  h('span', p.name)
                 ]
-              },
+              }
           )
-
     }))
   },
   {

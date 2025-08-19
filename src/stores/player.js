@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 import {getSongUrl} from '@/api/songlist.js'
 
 
@@ -35,12 +35,26 @@ export const usePlayerStore = defineStore('player', () => {
         window.$message.success("删除成功")
     }
 
+    const currentIndex = computed(() => playlists.value.findIndex(item => item.id === currentSong.value.id))
+
+    async function nextSong() {
+        if (currentIndex.value === playlists.value.length - 1) await play(playlists.value[0])
+        else await play(playlists.value[currentIndex.value + 1])
+    }
+
+    async function prevSong() {
+        if (currentIndex.value === 0) await play(playlists.value[playlists.value.length - 1])
+        else await play(playlists.value[currentIndex.value - 1])
+    }
+
     return {
         currentSong,
         playlists,
         play,
         addPlaylist,
-        removePlaylist
+        removePlaylist,
+        nextSong,
+        prevSong,
     }
 }, {
     persist: true,

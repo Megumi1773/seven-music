@@ -24,11 +24,9 @@ const dropDownList = [
 ]
 
 const handleSelect = (key: string) => {
-  console.log(key)
   switch (key) {
     case '/profile':
-      router.push('/profile')
-      message.info("跳转" + key)
+      router.push('/userprofile')
       break
     case 'quit':
       message.success("退出登录")

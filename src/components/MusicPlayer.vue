@@ -9,16 +9,18 @@ import {
   Playlist
 } from "@vicons/tabler";
 import {NButton, NIcon} from "naive-ui";
-import {useTemplateRef} from "vue"
+import {onMounted, useTemplateRef, watch} from "vue"
 import {storeToRefs} from 'pinia'
 import {usePlayerStore} from '@/stores/player'
-import {useMediaControls} from "@vueuse/core";
+import {useMediaControls, useStorage} from "@vueuse/core";
 
 const player = usePlayerStore()
-const {currentSong: song, playlists} = storeToRefs(player)
+const {currentSong: song} = storeToRefs(player)
 
 const audioRef = useTemplateRef('audio')
-const {currentTime, duration, volume, muted, playing} = useMediaControls(audioRef)
+const {currentTime, duration, volume, muted, playing, ended} = useMediaControls(audioRef)
+const savedTime = useStorage('audio-current-time', 0)
+watch(currentTime, val => savedTime.value = val)
 // 格式化进度条信息
 const formatPlayerTime = (v: number) => {
   const m = Math.floor(v / 60).toString().padStart(2, "0")
@@ -39,7 +41,16 @@ const togglePlay = () => {
 }
 // 通知父组件展开播放列表
 const emits = defineEmits(['openPlayList'])
+// 播完 自动切歌
+watch(ended, () => {
+  player.nextSong()
+})
 
+onMounted(() => {
+  if (savedTime.value && audioRef.value) {
+    audioRef.value.currentTime = savedTime.value
+  }
+})
 </script>
 
 <template>
@@ -51,7 +62,7 @@ const emits = defineEmits(['openPlayList'])
       <n-image preview-disabled style="width: 64px;height: 64px" v-if="song.album_cover"
                :src="song.album_cover"></n-image>
       <div style="width: 64px; height: 64px; background-color: #f0f0f0; border-radius: 4px;" v-else></div>
-      <div>
+      <div class="w-24 truncate">
         <div style="font-size: 14px; font-weight: 500; color: #333;">{{ song.name || '歌曲名称' }}</div>
         <div style="font-size: 12px; color: #666;">{{ song.artist_name || '作者' }}</div>
       </div>
@@ -59,7 +70,7 @@ const emits = defineEmits(['openPlayList'])
     <!-- 播放控制 -->
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div style="display: flex; align-items: center; gap: 16px;">
-        <n-button circle size="small" quaternary>
+        <n-button circle size="small" quaternary @click="player.prevSong">
           <n-icon>
             <player-skip-back/>
           </n-icon>
@@ -72,7 +83,7 @@ const emits = defineEmits(['openPlayList'])
             <player-play/>
           </n-icon>
         </n-button>
-        <n-button circle size="small" quaternary>
+        <n-button circle size="small" quaternary @click="player.nextSong">
           <n-icon>
             <player-skip-forward/>
           </n-icon>

@@ -1,5 +1,5 @@
 <script setup>
-import { HeartOutline, CaretForwardOutline } from '@vicons/ionicons5'
+import {HeartOutline, CaretForwardOutline} from '@vicons/ionicons5'
 // 轮播图数据
 
 const banners = [
@@ -27,46 +27,11 @@ const banners = [
 const recommendedPlaylists = [
   {
     id: 1,
-    cover: 'https://picsum.photos/300/300?random=10',
+    cover: 'https://qpic.y.qq.com/music_cover/82JEfXu7Egy5glogWBbe59bA6uwdxlrABjwfficsJgia5fqC377g8Pfw/300?n=1',
     title: '每日推荐',
     creator: '系统推荐',
     songCount: 30
   },
-  {
-    id: 2,
-    cover: 'https://picsum.photos/300/300?random=11',
-    title: '夏日清凉',
-    creator: '编辑推荐',
-    songCount: 25
-  },
-  {
-    id: 3,
-    cover: 'https://picsum.photos/300/300?random=12',
-    title: '摇滚现场',
-    creator: '摇滚频道',
-    songCount: 42
-  },
-  {
-    id: 4,
-    cover: 'https://picsum.photos/300/300?random=13',
-    title: '爵士时光',
-    creator: '爵士频道',
-    songCount: 18
-  },
-  {
-    id: 5,
-    cover: 'https://picsum.photos/300/300?random=14',
-    title: '电子音乐',
-    creator: '电子频道',
-    songCount: 35
-  },
-  {
-    id: 6,
-    cover: 'https://picsum.photos/300/300?random=15',
-    title: '民谣故事',
-    creator: '民谣频道',
-    songCount: 22
-  }
 ]
 
 // 热门歌手数据
@@ -74,33 +39,15 @@ const hotSingers = [
   {
     id: 1,
     name: '陈奕迅',
-    avatar: 'https://picsum.photos/100/100?random=20',
-    songCount: 125
+    avatar: 'https://y.qq.com/music/photo_new/T001R300x300M000003Nz2So3XXYek_4.jpg?max_age=2592000',
+    songCount: 29
   },
   {
     id: 2,
     name: '周杰伦',
-    avatar: 'https://picsum.photos/100/100?random=21',
-    songCount: 156
+    avatar: 'https://y.qq.com/music/photo_new/T001R150x150M0000025NhlN2yWrP4.jpg?max_age=2592000',
+    songCount: 25
   },
-  {
-    id: 3,
-    name: '李宗盛',
-    avatar: 'https://picsum.photos/100/100?random=22',
-    songCount: 98
-  },
-  {
-    id: 4,
-    name: '孙燕姿',
-    avatar: 'https://picsum.photos/100/100?random=23',
-    songCount: 112
-  },
-  {
-    id: 5,
-    name: '五月天',
-    avatar: 'https://picsum.photos/100/100?random=24',
-    songCount: 143
-  }
 ]
 
 // 最新音乐数据
@@ -192,7 +139,9 @@ const favoriteSong = (song, index) => {
         <div class="section-more"
              :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
           <span>更多</span>
-          <n-icon :component="CaretForwardOutline"></n-icon>
+          <n-icon>
+            <CaretForwardOutline/>
+          </n-icon>
         </div>
       </div>
 
@@ -200,7 +149,9 @@ const favoriteSong = (song, index) => {
            :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }">
         <n-card v-for="playlist in recommendedPlaylists" :key="playlist.id"
                 :style="{ borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s', cursor: 'pointer' }"
-                hoverable>
+                hoverable
+                @click="$router.push(`/everyday`)"
+                class="group-hover:bg-black-50 transition-all duration-200">
           <div slot="cover" :style="{ position: 'relative' }">
             <img :src="playlist.cover" alt="歌单封面" :style="{ width: '100%', height: '180px', objectFit: 'cover' }"/>
             <div
@@ -269,7 +220,9 @@ const favoriteSong = (song, index) => {
       <div class="singer-list"
            :style="{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '20px' }">
         <div v-for="singer in hotSingers" :key="singer.id"
-             :style="{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }">
+             :style="{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }"
+             @click="$router.push(`/artistprofile/${singer.id}`)"
+        >
           <div
               :style="{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }">
             <img :src="singer.avatar" alt="歌手头像" :style="{ width: '100%', height: '100%', objectFit: 'cover' }"/>

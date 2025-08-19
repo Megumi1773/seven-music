@@ -5,6 +5,7 @@ import {ref, h, watch} from "vue";
 import {NIcon, useMessage} from "naive-ui"
 import {Heart, Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
+import SongsTable from "@/components/SongsTable.vue";
 
 const defaultAvatar =
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4='
@@ -26,7 +27,6 @@ const getPlaylistDetail = async () => {
   let a = await getPlaylistById(playlistId.value)
   playlistDetail.value = a.data.data
   if (a.data.code === 200) {
-    msg.success(a.data.message)
     loading.value = false
   }
 }
@@ -35,83 +35,10 @@ const getPlaylistSong = async () => {
   let b = await getPlayListSongs(playlistId.value)
   playlistSongs.value = b.data.data
   if (b.data.code === 200) {
-    msg.success(b.data.message)
     loading.value = false
   }
 }
-getPlaylistDetail()
-getPlaylistSong()
 
-const columns = [
-  {
-    title: "#",
-    key: "id",
-    render(row: any, index: number) {
-      return h('div', {style: {width: '26px'}}, index + 1)
-    }
-  },
-  {
-    title: "标题",
-    key: "name",
-    render(row: any) {
-      return h('div', {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          width: '400px',
-        }
-      }, [
-        // 专辑封面图片
-        h('img', {
-          src: row.album_cover,
-          style: {
-            width: '40px',
-            height: '40px',
-            borderRadius: '4px'
-          }
-        }),
-        // 歌曲信息及标识区域
-        h('div', [
-          h('div', {style: {fontWeight: 'bold'}}, row.name),
-          h('div', {style: {fontSize: '12px', color: '#999'}}, [
-            row.artist_name
-          ])
-        ])
-      ]);
-    },
-  },
-
-  {
-    title: "专辑",
-    key: "album_name",
-  },
-  {
-    title: "喜欢",
-    render(row: any) {
-      // 使用 h 函数渲染 NIcon 并传入图标组件
-      return h(NIcon, {
-        size: 18, // 图标大小
-        color: row.isLiked ? 'red' : '#999', // 可以根据数据动态改变颜色
-        style: {cursor: 'pointer'},
-        onClick: () => {
-          msg.success("喜欢听Eason")
-        }
-      }, {
-        default: () => h(Heart) // 传入图标组件
-      });
-    }
-  },
-  {
-    title: "时长",
-    key: "duration",
-    render(row: any) {
-      return h('span', {}, {
-        default: () => formtDate(row.duration),
-      })
-    }
-  }
-]
 // 歌曲时长格式化
 const formtDate = (num: number) => {
   let minutes = Math.floor(num / 60)
@@ -127,14 +54,10 @@ const formatDate = (iso: string) => new Date(iso).toLocaleDateString('zh-CN', {
 
 const playerStore = usePlayerStore()
 
-const rowClick = (song: any) => ({
-  style: 'cursor: pointer;',
-  ondblclick: () => {
-    playerStore.play(song)
-    playerStore.addPlaylist(playlistSongs.value)
-  }
-})
-
+const playAll = () => {
+  playerStore.play(playlistSongs.value[0])
+  playerStore.addPlaylist(playlistSongs.value)
+}
 watch(
     () => route.params.id,
     (newId) => {
@@ -181,7 +104,7 @@ watch(
           </span>
         </n-flex>
         <n-flex>
-          <n-button type="primary">
+          <n-button type="primary" @click.stop="playAll">
             <template #icon>
               <n-icon>
                 <Play/>
@@ -201,14 +124,7 @@ watch(
       </n-flex>
     </n-flex>
   </n-card>
-  <n-data-table
-      :loading="loading"
-      :columns="columns"
-      :data="playlistSongs"
-      :bordered="false"
-      :row-props="rowClick"
-      striped
-  />
+  <SongsTable v-model:data="playlistSongs" v-model:loading="loading"></SongsTable>
   <!--  <pre>-->
   <!--歌单ID:{{ playlistId }}-->
   <!--歌单信息:{-->
@@ -217,5 +133,5 @@ watch(
   <!--歌单歌曲：{-->
   <!--  {{ playlistSongs }}-->
   <!--  }-->
-  <!--</pre>-->
 </template>
+<!--</pre>-->

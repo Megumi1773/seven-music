@@ -1,10 +1,10 @@
 import request from "@/service/request.js"
 
 export const getPlaylists = async () => {
-    return await request.get('/playlists')
+    return await request.get('/playlists/list')
 }
 export const getPlaylistById = async (id) => {
-    return await request.get(`/playlists/${id}`)
+    return await request.get(`/playlists/info/${id}`)
 }
 export const getPlayListSongs = async (id) => {
     return await request.get(`/playlists/${id}/songs`)
@@ -16,4 +16,8 @@ export const getSongUrl = async (id) => {
 
 export const createNewPlaylist = async (data) => {
     return await request.post(`/playlists/`, data)
+}
+
+export const deletePlaylist = async (id) => {
+    return await request.delete(`/playlists/${id}`)
 }

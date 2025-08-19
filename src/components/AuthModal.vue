@@ -31,6 +31,7 @@ const handleLogin = async () => {
       userStore.setToken(res.data.data.token)
       msg.success(res.data.message)
       emit('loginSuccess')
+      window.location.reload()
     }
   } finally {
     loading.value = false
