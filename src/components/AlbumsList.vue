@@ -1,14 +1,14 @@
 <script setup>
 import {ref} from "vue"
-import {NImage, NFlex, NGrid, NGridItem, NIcon} from "naive-ui"
+import {NFlex, NGrid, NGridItem, NIcon, NImage} from "naive-ui"
 import {useRouter} from "vue-router";
-import {Play, DuplicateSharp, Heart} from '@vicons/ionicons5'
+import {DuplicateSharp, Heart, Play} from '@vicons/ionicons5'
 
 const router = useRouter()
 const data = defineModel('albumsList', {required: true})
-
+console.log(data)
 const goDetail = (id) => {
-  router.push(`/playlist/${id}`)
+  router.push(`/album/${id}`)
 }
 
 
@@ -54,7 +54,13 @@ const handleSelect = (key) => {
   }
 }
 
-
+const formatRealisDate = (value) => {
+  let date = new Date(Date.parse(value))
+  let y = date.getFullYear()
+  let m = date.getMonth() + 1
+  let d = date.getDate()
+  return `${y}-${m}-${d}`
+}
 </script>
 <template>
   <n-card class="mb-8">
@@ -74,13 +80,13 @@ const handleSelect = (key) => {
     </n-flex>
 
     <n-grid :cols="6" :x-gap="24" :y-gap="24">
-      <n-grid-item v-for="song in data" :key="song.id" @contextmenu="handleContextMenu($event,song.id)">
-        <div @click="goDetail(song.id)" class="group cursor-pointer">
+      <n-grid-item v-for="album in data" :key="album.id" @contextmenu="handleContextMenu($event,album.id)">
+        <div @click="goDetail(album.id)" class="group cursor-pointer">
           <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
             <n-image
                 preview-disabled
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                :src="song.cover || 'https://imgapi.xl0408.top/index.php'"
+                :src="album.cover || 'https://imgapi.xl0408.top/index.php'"
             />
             <div
                 class="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-all duration-300 flex items-center justify-center pointer-events-none z-10">
@@ -92,8 +98,8 @@ const handleSelect = (key) => {
             </div>
           </div>
           <div>
-            <h3 class="font-medium text-sm truncate">{{ song.name }}</h3>
-            <p class="text-xs text-gray-500">{{ song.nickname }}</p>
+            <h2 class="text-sm truncate text-gray-700 font-black p-3">{{ album.name }}</h2>
+            <p class="truncate text-gray-400 font-black p-3">{{ formatRealisDate(album.release_time) }}</p>
           </div>
         </div>
       </n-grid-item>

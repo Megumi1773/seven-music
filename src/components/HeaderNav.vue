@@ -38,15 +38,14 @@ const openModal = ref(false)
 const openLoginModal = () => {
   openModal.value = !openModal.value
 }
+
 </script>
 
 <template>
   <n-flex align="center" justify="space-between" style="height: 100%;">
-    <n-flex align="center">
-      <!--      logo暂时留-->
-
-      <!--      <img src="">-->
-      <h2 style="margin: 0; color: #333;">CloudMusic</h2>
+    <n-flex align="center" justify="center">
+<!--      <n-image :src="'/src/assets/public/logo.png'" rounded class="w-20" style="aspect-ratio: 1/1;object-fit: cover" alt="logo"/>-->
+      <h2 style="margin: 0; color: #333;">Se7enMusic</h2>
     </n-flex>
 
     <n-flex class="w-xl">

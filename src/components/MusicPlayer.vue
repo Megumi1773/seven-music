@@ -55,7 +55,7 @@ onMounted(() => {
 
 <template>
   <div style="display: flex; align-items: center; justify-content: space-between; height: 100%;">
-    <audio ref="audio" :src="song.url" controls autoplay style="display: none">
+    <audio ref="audio" autoplay :src="song.url" style="display: none">
     </audio>
     <!-- 歌曲信息 -->
     <div style="display: flex; align-items: center; gap: 12px;">

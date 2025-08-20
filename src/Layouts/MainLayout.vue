@@ -34,7 +34,7 @@ const router = useRouter()
 window.$message = useMessage()
 const route = useRoute()
 const userStore = useUserStore()
-const isLoggedIn = storeToRefs(userStore.isLogin)
+const isLoggedIn = localStorage.getItem('isLogin')
 // 获取用户歌单
 const songList = ref([])
 const getUserPlaylist = async () => {
@@ -44,6 +44,9 @@ const getUserPlaylist = async () => {
   } else {
     songList.value = []
   }
+}
+if (isLoggedIn) {
+  getUserPlaylist()
 }
 
 // 侧边栏菜单选项
@@ -154,9 +157,6 @@ onMounted(() => {
   setTimeout(() => {
     activeKey.value = route.path.split('/')[1]
   }, 100)
-  if (isLoggedIn.value) {
-    getUserPlaylist()
-  }
 })
 const showPlaylist = ref(false)
 const handleOpenList = () => {

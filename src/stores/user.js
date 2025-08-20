@@ -16,9 +16,12 @@ export const useUserStore = defineStore('User', () => {
         const nowToken = useStorage("token", '')
         const router = useRouter()
         const token = ref('')
-        const isLogin = computed(() => token.value !== '')
+        const isLogin = useStorage("isLogin", false)
         watch(token, () => {
             nowToken.value = token.value
+            if (token) {
+                isLogin.value = true
+            }
         })
 
         function getUserInfo() {
@@ -51,6 +54,7 @@ export const useUserStore = defineStore('User', () => {
             await setToken('')
             await localStorage.removeItem('token')
             await localStorage.removeItem('User')
+            await localStorage.removeItem('isLogin')
             await router.push('/')
         }
 
