@@ -2,6 +2,7 @@ import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import {Logout} from "@/api/user.js";
 import {useRouter} from "vue-router";
+import {useStorage} from "@vueuse/core";
 
 export const useUserStore = defineStore('User', () => {
         const userInfo = ref({
@@ -12,9 +13,13 @@ export const useUserStore = defineStore('User', () => {
             email: '',
             avatar: ''
         })
+        const nowToken = useStorage("token", '')
         const router = useRouter()
         const token = ref('')
         const isLogin = computed(() => token.value !== '')
+        watch(token, () => {
+            nowToken.value = token.value
+        })
 
         function getUserInfo() {
             return userInfo.value
@@ -44,6 +49,7 @@ export const useUserStore = defineStore('User', () => {
             await Logout()
             await setUserInfo({})
             await setToken('')
+            await localStorage.removeItem('token')
             await localStorage.removeItem('User')
             await router.push('/')
         }

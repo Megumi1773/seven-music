@@ -15,9 +15,8 @@ const api = axios.create(
 // 添加请求拦截器
 api.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    let user = JSON.parse(localStorage.getItem("User"))
-    if (user) {
-        let token = user.token
+    const token = localStorage.getItem('token')
+    if (token) {
         config.headers.Authorization = `Bearer ${token}`
     }
     return config;
@@ -46,8 +45,9 @@ api.interceptors.response.use(function (response) {
                 case 401:
                     errorMessage = data.message || '登录状态已过期，请重新登录！';
                     // 可以在这里清空 token 并跳转到登录页
-                    localStorage.removeItem('User');
-                    localStorage.removeItem('player');
+                    localStorage.removeItem('User')
+                    localStorage.removeItem('player')
+                    localStorage.removeItem('token')
 
                     // router.push('/login'); // 如果你需要路由跳转，需要在这里导入 router
                     break;

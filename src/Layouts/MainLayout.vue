@@ -27,10 +27,14 @@ import {useMessage} from "naive-ui";
 import {usePlayerStore} from "@/stores/player.js";
 import {storeToRefs} from "pinia";
 import {getPlaylists} from "@/api/songlist.js";
+import {useUserStore} from "@store/user.js";
+import {useStorage} from "@vueuse/core";
 
-const router = useRouter();
+const router = useRouter()
 window.$message = useMessage()
 const route = useRoute()
+const userStore = useUserStore()
+const isLoggedIn = storeToRefs(userStore.isLogin)
 // 获取用户歌单
 const songList = ref([])
 const getUserPlaylist = async () => {
@@ -150,7 +154,9 @@ onMounted(() => {
   setTimeout(() => {
     activeKey.value = route.path.split('/')[1]
   }, 100)
-  getUserPlaylist()
+  if (isLoggedIn.value) {
+    getUserPlaylist()
+  }
 })
 const showPlaylist = ref(false)
 const handleOpenList = () => {

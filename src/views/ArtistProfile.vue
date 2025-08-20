@@ -1,20 +1,21 @@
-<script setup lang="ts">
-import {getUserInfo, updateProfile} from '@/api/user'
+<script setup>
 import {getArtistInfo, getArtistSongs, getArtistSongCount} from '@/api/artist'
-import {onMounted, ref, reactive, computed, watch} from "vue";
-import {useMessage, useThemeVars} from 'naive-ui'
-import {User, Mail, Phone, Edit, Camera} from '@vicons/tabler'
-import SongListsView from "@/components/SongListsView.vue";
+import {ref, computed, watch} from "vue";
+import {useMessage,} from 'naive-ui'
+import {User} from '@vicons/tabler'
+
 import {useRoute} from "vue-router";
 import {Play, HeartOutline} from "@vicons/ionicons5";
 import SongsTable from "@/components/SongsTable.vue";
 import {usePlayerStore} from '@store/player'
+import AlbumsList from "@/components/AlbumsList.vue";
+import {getArtistAlbums} from "@/api/artist.js"
 
-const message = useMessage()
-let originalData = ref()
-let isEditing = ref(false)
+let msg = useMessage()
+
+
 let loading = ref(false)
-let avatarLoading = ref(false)
+
 const route = useRoute()
 const artistId = ref(route.params.id)
 // 表单数据
@@ -73,6 +74,22 @@ const playAll = () => {
   player.play(SongList.value[0])
   player.addPlaylist(SongList.value)
 }
+
+
+// 专辑相关
+const albums = ref([])
+const getData = async () => {
+  try {
+    let res = await getArtistAlbums(artistId.value)
+    console.log(res.data)
+    albums.value = res.data.data || []
+  } catch (e) {
+    msg.error(e.message)
+  } finally {
+    loading.value = false
+  }
+}
+getData()
 </script>
 
 <template>
@@ -126,7 +143,7 @@ const playAll = () => {
           <n-pagination v-model:page="page" :page-count="songsNumber"/>
         </n-tab-pane>
         <n-tab-pane name="专辑" tab="专辑">
-          <SongListsView></SongListsView>
+          <AlbumsList v-model:albums-list="albums"></AlbumsList>
         </n-tab-pane>
         <n-tab-pane name="歌手详情" tab="歌手详情">
           <n-card

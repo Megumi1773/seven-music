@@ -11,3 +11,7 @@ export const getArtistSongs = async (id, page, pageSize) => {
 export const getArtistSongCount = async (id) => {
     return await request.get(`/artists/${id}/count`)
 }
+
+export const getArtistAlbums = async (id) => {
+    return await request.get(`/artists/${id}/albums`)
+}

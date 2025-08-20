@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useUserStore} from "@/stores/user";
-import {Search, Settings} from "@vicons/tabler";
+import {Search, Settings, ArrowBackUp} from "@vicons/tabler";
 import {NButton, NIcon, NInput, useMessage} from "naive-ui";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
@@ -48,18 +48,26 @@ const openLoginModal = () => {
       <!--      <img src="">-->
       <h2 style="margin: 0; color: #333;">CloudMusic</h2>
     </n-flex>
-    <div style="flex: 1; max-width: 500px; margin: 0 24px;">
-      <n-input
-          v-model:value="searchValue"
-          placeholder="搜索音乐、歌手、专辑..."
-      >
-        <template #prefix>
-          <n-icon>
-            <search/>
-          </n-icon>
-        </template>
-      </n-input>
-    </div>
+
+    <n-flex class="w-xl">
+      <n-button size="medium" @click.stop="$router.go(-1)">
+        <n-icon>
+          <ArrowBackUp/>
+        </n-icon>
+      </n-button>
+      <div style="flex: 1; max-width: 500px; margin: 0 24px;">
+        <n-input
+            v-model:value="searchValue"
+            placeholder="搜索音乐、歌手、专辑..."
+        >
+          <template #prefix>
+            <n-icon>
+              <search/>
+            </n-icon>
+          </template>
+        </n-input>
+      </div>
+    </n-flex>
 
     <n-flex style="display: flex; align-items: center; gap: 12px;">
       <n-dropdown trigger="click" :options="dropDownList" @select="handleSelect" v-if="userStore.isLogin">

@@ -60,5 +60,16 @@ const router = createRouter({
 
     ],
 })
+router.beforeEach((to, from, next) => {
+    // 如果访问的是 "/discover" 就直接放行
+    if (to.name === 'discover') return next()
 
+    // 其余路由要求登录，这里取个 token 做示例
+    const token = localStorage.getItem('token')
+    if (!token) {
+        window.$message.info("请先登录")
+        return next({name: 'discover'})
+    }
+    next()
+})
 export default router
