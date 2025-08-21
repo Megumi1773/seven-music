@@ -21,3 +21,7 @@ export const createNewPlaylist = async (data) => {
 export const deletePlaylist = async (id) => {
     return await request.delete(`/playlists/${id}`)
 }
+
+export const addPlayListSong = async (id, data) => {
+    return await request.post(`/playlists/${id}/songs`, data)
+}

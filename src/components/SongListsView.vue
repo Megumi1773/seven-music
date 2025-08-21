@@ -8,20 +8,21 @@ import {Play, AddOutline} from '@vicons/ionicons5'
 import {
   Trash,
 } from '@vicons/tabler'
+import {useSongListStore} from "@store/songlist.js"
+import {storeToRefs} from "pinia"
 
 const router = useRouter()
 let msg = useMessage()
-const songlist = ref([])
+const songListStore = useSongListStore()
+const {songList} = storeToRefs(songListStore) || []
 const userInfo = ref(null)
 const loading = ref(true)
 
 const getUserData = async () => {
   try {
-    const [playlistsRes, userRes] = await Promise.all([
-      getPlaylists(),
+    const [userRes] = await Promise.all([
       getUserInfo()
     ])
-    songlist.value = playlistsRes.data.data || []
     userInfo.value = userRes.data?.data || userRes.data
   } catch (error) {
     msg.error(error.message)
@@ -66,6 +67,7 @@ const createPlaylist = async () => {
   if (res.data.code === 200) {
     msg.success(res.data.message)
     await getUserData()
+    await songListStore.getUserPlaylist()
   }
 }
 const addForm = useTemplateRef('addForm') || null
@@ -143,7 +145,7 @@ const submitCallback = () => {
       <n-flex justify="space-between" class="w-full">
         <n-flex align="center" vertical class="mb-5">
           <h1 class="text-2xl font-bold mb-1">我的创建的歌单</h1>
-          <p class="text-gray-600">共 {{ songlist.length }} 个歌单</p>
+          <p class="text-gray-600">共 {{ songList.length }} 个歌单</p>
         </n-flex>
         <n-button-group>
           <n-button type="primary" @click="showNewPlaylist">
@@ -166,7 +168,7 @@ const submitCallback = () => {
       </n-flex>
     </n-flex>
     <n-spin :show="loading" size="large">
-      <n-empty v-if="!loading && songlist.length === 0" description="暂无歌单">
+      <n-empty v-if="!loading && songList.length === 0" description="暂无歌单">
         <template #extra>
           <n-button type="primary" @click="showNewPlaylist">
             <template #icon>
@@ -178,7 +180,7 @@ const submitCallback = () => {
       </n-empty>
 
       <n-grid v-else :cols="6" :x-gap="24" :y-gap="24">
-        <n-grid-item v-for="song in songlist" :key="song.id" @contextmenu="handleContextMenu($event,song.id)">
+        <n-grid-item v-for="song in songList" :key="song.id" @contextmenu="handleContextMenu($event,song.id)">
           <div @click="goDetail(song.id)" class="group cursor-pointer">
             <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
               <n-image

@@ -1,23 +1,28 @@
 <script setup>
 import {HeartOutline, CaretForwardOutline} from '@vicons/ionicons5'
+import {NGrid, NGridItem, NIcon, NImage} from "naive-ui"
+import {Play} from '@vicons/ionicons5'
+import {useRouter} from "vue-router"
+import {useSongListStore} from "@store/songlist.js"
+import {storeToRefs} from "pinia"
 // 轮播图数据
-
+const router = useRouter()
 const banners = [
   {
     id: 1,
-    image: 'https://picsum.photos/1200/400?random=1',
+    image: 'https://p5.music.126.net/obj/wonDlsKUwrLClGjCm8Kx/62008863073/8052/39a7/8edd/4d19acc260adeaab20d69c9254b064fe.jpg?imageView&quality=89',
     title: '夏日音乐盛典',
     description: '打造你的专属夏日歌单'
   },
   {
     id: 2,
-    image: 'https://picsum.photos/1200/400?random=2',
+    image: 'https://p5.music.126.net/obj/wonDlsKUwrLClGjCm8Kx/62014037393/3407/8c91/75a0/72c73b63016e55d500ea10c895277b9c.jpg?imageView&quality=89',
     title: '经典专辑重制版',
     description: '重温那些年的经典之作'
   },
   {
     id: 3,
-    image: 'https://picsum.photos/1200/400?random=3',
+    image: 'https://p5.music.126.net/obj/wonDlsKUwrLClGjCm8Kx/62025138991/e6c1/e8ac/d6d4/2ee34bd0e963308e338529262e948f03.jpg?imageView&quality=89',
     title: '独立音乐新势力',
     description: '发现最具潜力的独立音乐人'
   }
@@ -100,13 +105,19 @@ const favoriteSong = (song, index) => {
   console.log('收藏歌曲:', song)
   // 实际项目中这里会调用收藏API
 }
-
+// 歌单
+const songListStore = useSongListStore()
+const {songList} = storeToRefs(songListStore)
+const goDetail = (id) => {
+  router.push(`/playlist/${id}`)
+}
 </script>
 <template>
   <div class="home-container">
     <!-- 轮播图区域 -->
     <div class="banner-container" :style="{ marginBottom: '30px' }">
-      <n-carousel :style="{ width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden' }" autoplay
+      <n-carousel :style="{ width: '100%', height: '100%', borderRadius: '8px', overflow: 'hidden',objectFit:'cover' }"
+                  autoplay
                   :interval="5000" indicator-placement="bottom">
         <n-carousel-item v-for="banner in banners" :key="banner.id">
           <div :style="{
@@ -129,6 +140,35 @@ const favoriteSong = (song, index) => {
           </div>
         </n-carousel-item>
       </n-carousel>
+
+      <n-card class="h-full w-full">
+        <template #header>
+          <span class="text-2xl">晚上好，</span>
+          猜你想听~~
+        </template>
+        <n-grid :cols="4" :x-gap="24" :y-gap="24">
+          <n-grid-item v-for="item in songList" :key="item.id" class="group-hover:transform translate-4 duration-300 min-w-16">
+            <div @click="goDetail(item.id)" class="group cursor-pointer">
+              <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
+                <n-image
+                    preview-disabled
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    :src="item.cover || 'https://imgapi.xl0408.top/index.php'"
+                />
+                <div
+                    class="absolute inset-0 bg-teal-900 opacity-0 group-hover:opacity-40 transition-all duration-300 flex items-center justify-center pointer-events-none z-10">
+                  <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <n-icon size="48" color="white">
+                      <Play/>
+                    </n-icon>
+                    <h2 class="text-sm truncate text-red-100 font-black p-3">{{ item.name }}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </n-grid-item>
+        </n-grid>
+      </n-card>
     </div>
 
     <!-- 推荐歌单区域 -->
@@ -243,6 +283,8 @@ const favoriteSong = (song, index) => {
 
 /* 轮播图样式 */
 .banner-container {
+  display: flex;
+  height: 16rem;
   margin-bottom: 30px;
 }
 

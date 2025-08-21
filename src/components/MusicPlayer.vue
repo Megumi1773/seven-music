@@ -6,17 +6,20 @@ import {
   Volume as VolumeIcon,
   Volume3,
   PlayerPause,
-  Playlist
+  Playlist,
+  PlaylistAdd
 } from "@vicons/tabler";
-import {NButton, NIcon} from "naive-ui";
-import {onMounted, useTemplateRef, watch} from "vue"
+import {NButton, NIcon, useMessage} from "naive-ui";
+import {onMounted, ref, useTemplateRef, watch} from "vue"
 import {storeToRefs} from 'pinia'
-import {usePlayerStore} from '@/stores/player'
+import {usePlayerStore} from '@store/player'
 import {useMediaControls, useStorage} from "@vueuse/core";
+import {addPlayListSong} from '@/api/songlist'
+import {useSongListStore} from '@store/songlist'
 
 const player = usePlayerStore()
 const {currentSong: song} = storeToRefs(player)
-
+let msg = useMessage()
 const audioRef = useTemplateRef('audio')
 const {currentTime, duration, volume, muted, playing, ended} = useMediaControls(audioRef)
 const savedTime = useStorage('audio-current-time', 0)
@@ -51,6 +54,24 @@ onMounted(() => {
     audioRef.value.currentTime = savedTime.value
   }
 })
+
+// 收藏
+const collectModalShow = ref(false)
+const openModal = () => {
+  collectModalShow.value = true
+}
+const collectPlaylist = async (id: number) => {
+  let data = {
+    song_ids: [song.value.id],
+  }
+  let res = await addPlayListSong(id, data)
+  if (res.data.code === 200) {
+    msg.success(res.data.message)
+    collectModalShow.value = false
+  }
+}
+const songListStore = useSongListStore()
+const {songList} = storeToRefs(songListStore)
 </script>
 
 <template>
@@ -62,9 +83,31 @@ onMounted(() => {
       <n-image preview-disabled style="width: 64px;height: 64px" v-if="song.album_cover"
                :src="song.album_cover"></n-image>
       <div style="width: 64px; height: 64px; background-color: #f0f0f0; border-radius: 4px;" v-else></div>
-      <div class="w-24 truncate">
-        <div style="font-size: 14px; font-weight: 500; color: #333;">{{ song.name || '歌曲名称' }}</div>
-        <div style="font-size: 12px; color: #666;">{{ song.artist_name || '作者' }}</div>
+      <div class="w-36 truncate">
+        <div style="font-size: 14px; font-weight: 500; color: #333;">
+          <n-marquee>
+            <pre class="font-bold"> {{ song.name.replace(/\s+/g, '') || '歌曲名称' }}-<span style="color: #666;">{{
+                (song.artist_name || '作者') + "      "
+              }}</span></pre>
+          </n-marquee>
+        </div>
+        <n-flex>
+          <n-button size="small" quaternary circle @click="openModal">
+            <n-icon size="20" class="hover:cursor-pointer text-black" color="#666">
+              <PlaylistAdd/>
+            </n-icon>
+          </n-button>
+          <n-button size="small" quaternary circle>
+            <n-icon size="20" class="hover:cursor-pointer text-black" color="#666">
+              <PlaylistAdd/>
+            </n-icon>
+          </n-button>
+          <n-button size="small" quaternary circle>
+            <n-icon size="20" class="hover:cursor-pointer text-black" color="#666">
+              <PlaylistAdd/>
+            </n-icon>
+          </n-button>
+        </n-flex>
       </div>
     </div>
     <!-- 播放控制 -->
@@ -120,6 +163,26 @@ onMounted(() => {
     </div>
 
   </div>
+
+  <!--收藏模态框-->
+  <n-modal
+      v-model:show="collectModalShow"
+      class="max-w-xl"
+      preset="card"
+      title="收藏到歌单"
+      size="huge"
+      :bordered="false"
+  >
+    <n-list hoverable clickable>
+      <n-list-item v-for="item in songList" :key="item.id" @click="collectPlaylist(item.id)">
+        <n-flex align="center">
+          <n-image :src="item.cover" mode="aspectFit" class="rounded" width="96" height="96">
+          </n-image>
+          <p>{{ item.name }}</p>
+        </n-flex>
+      </n-list-item>
+    </n-list>
+  </n-modal>
 </template>
 
 <style scoped>

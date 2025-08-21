@@ -55,7 +55,10 @@ export const useUserStore = defineStore('User', () => {
             await localStorage.removeItem('token')
             await localStorage.removeItem('User')
             await localStorage.removeItem('isLogin')
+            await localStorage.removeItem('player')
+            await localStorage.removeItem('audio-current-time')
             await router.push('/')
+            await window.location.reload()
         }
 
         return {

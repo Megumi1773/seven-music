@@ -29,25 +29,16 @@ import {storeToRefs} from "pinia";
 import {getPlaylists} from "@/api/songlist.js";
 import {useUserStore} from "@store/user.js";
 import {useStorage} from "@vueuse/core";
+import {useSongListStore} from "@store/songlist.js";
 
 const router = useRouter()
 window.$message = useMessage()
 const route = useRoute()
 const userStore = useUserStore()
-const isLoggedIn = localStorage.getItem('isLogin')
+const songListStore = useSongListStore()
 // 获取用户歌单
-const songList = ref([])
-const getUserPlaylist = async () => {
-  let res = await getPlaylists()
-  if (res.data.code === 200) {
-    songList.value = res.data.data || []
-  } else {
-    songList.value = []
-  }
-}
-if (isLoggedIn) {
-  getUserPlaylist()
-}
+const {songList} = storeToRefs(songListStore) || [];
+songListStore.getUserPlaylist()
 
 // 侧边栏菜单选项
 const menuOptions = computed(() => [
