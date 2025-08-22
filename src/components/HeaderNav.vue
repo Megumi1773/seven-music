@@ -36,7 +36,7 @@ const handleSelect = (key: string) => {
 }
 const openModal = ref(false)
 const openLoginModal = () => {
-  openModal.value = !openModal.value
+  openModal.value = true
 }
 
 </script>

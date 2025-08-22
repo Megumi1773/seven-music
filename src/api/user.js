@@ -15,3 +15,11 @@ export const Logout = async () => {
 export const updateProfile = async (data) => {
     return await request.put('/user/info', data)
 }
+
+
+export const getMailCode = async (data) => {
+    return await request.post('/user/getcode', data)
+}
+export const register = async (data) => {
+    return await request.post('/user/register', data)
+}

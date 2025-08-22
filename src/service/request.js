@@ -6,7 +6,7 @@ import {useRouter} from "vue-router";
 const api = axios.create(
     {
         baseURL: "/api",
-        timeout: 1000,
+        timeout: 10000,
         headers: {
             "Content-Type": "application/json",
         },
@@ -48,6 +48,7 @@ api.interceptors.response.use(function (response) {
                     localStorage.removeItem('User')
                     localStorage.removeItem('player')
                     localStorage.removeItem('token')
+                    localStorage.removeItem('isLogin')
 
                     // router.push('/login'); // 如果你需要路由跳转，需要在这里导入 router
                     break;

@@ -2,7 +2,7 @@
 import {useRoute} from "vue-router";
 import {getPlaylistById, getPlayListSongs} from '@/api/songlist'
 import {ref, h, watch} from "vue";
-import {NIcon, useMessage} from "naive-ui"
+import {NIcon,useMessage} from "naive-ui"
 import {Heart, Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
 import SongsTable from "@/components/SongsTable.vue";

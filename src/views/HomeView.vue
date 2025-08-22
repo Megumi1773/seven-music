@@ -5,6 +5,8 @@ import {Play} from '@vicons/ionicons5'
 import {useRouter} from "vue-router"
 import {useSongListStore} from "@store/songlist.js"
 import {storeToRefs} from "pinia"
+import {useUserStore} from "@store/user.js";
+import dayjs from "dayjs";
 // 轮播图数据
 const router = useRouter()
 const banners = [
@@ -111,6 +113,15 @@ const {songList} = storeToRefs(songListStore)
 const goDetail = (id) => {
   router.push(`/playlist/${id}`)
 }
+const userStore = useUserStore()
+const {isLogin} = storeToRefs(userStore)
+const welcome = computed(() => {
+  let h = dayjs().hour()
+
+  if (h < 12) return '上午好'
+  if (h < 18) return '下午好'
+  return '晚上好'
+})
 </script>
 <template>
   <div class="home-container">
@@ -141,13 +152,16 @@ const goDetail = (id) => {
         </n-carousel-item>
       </n-carousel>
 
-      <n-card class="h-full w-full">
+      <n-card class="h-full w-full" v-if="isLogin">
         <template #header>
-          <span class="text-2xl">晚上好，</span>
-          猜你想听~~
+          <span class="text-xl"><span class="text-2xl">{{ welcome }}</span>，亲爱的 {{
+              userStore.userInfo.nickname
+            }}，</span>
+          <span style="color: #888">猜你想听~~</span>
         </template>
         <n-grid :cols="4" :x-gap="24" :y-gap="24">
-          <n-grid-item v-for="item in songList" :key="item.id" class="group-hover:transform translate-4 duration-300 min-w-16">
+          <n-grid-item v-for="item in songList" :key="item.id"
+                       class="group-hover:transform translate-4 duration-300 min-w-16">
             <div @click="goDetail(item.id)" class="group cursor-pointer">
               <div class="relative rounded-lg overflow-hidden mb-2" style="aspect-ratio: 1/1;">
                 <n-image
@@ -168,6 +182,9 @@ const goDetail = (id) => {
             </div>
           </n-grid-item>
         </n-grid>
+      </n-card>
+      <n-card class="h-full w-full" v-else>
+        please login up !.
       </n-card>
     </div>
 

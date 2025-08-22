@@ -23,7 +23,6 @@ import {Play} from '@vicons/ionicons5'
 import HeaderNav from "@/components/HeaderNav.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
 import {RouterLink, useRoute, useRouter} from "vue-router";
-import {useMessage} from "naive-ui";
 import {usePlayerStore} from "@/stores/player.js";
 import {storeToRefs} from "pinia";
 import {getPlaylists} from "@/api/songlist.js";
@@ -32,7 +31,6 @@ import {useStorage} from "@vueuse/core";
 import {useSongListStore} from "@store/songlist.js";
 
 const router = useRouter()
-window.$message = useMessage()
 const route = useRoute()
 const userStore = useUserStore()
 const songListStore = useSongListStore()
