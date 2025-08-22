@@ -5,8 +5,8 @@ import {Play} from '@vicons/ionicons5'
 import {useRouter} from "vue-router"
 import {useSongListStore} from "@store/songlist.js"
 import {storeToRefs} from "pinia"
-import {useUserStore} from "@store/user.js";
-import dayjs from "dayjs";
+import {useUserStore} from "@store/user.js"
+import dayjs from "dayjs"
 // 轮播图数据
 const router = useRouter()
 const banners = [
