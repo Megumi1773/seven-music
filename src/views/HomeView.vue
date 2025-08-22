@@ -103,7 +103,7 @@ const playSong = (song) => {
 }
 
 // 收藏歌曲函数
-const favoriteSong = (song, index) => {
+const favoriteSong = (song) => {
   console.log('收藏歌曲:', song)
   // 实际项目中这里会调用收藏API
 }
@@ -318,12 +318,6 @@ const welcome = computed(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
-}
-
-/* 歌曲列表悬停效果 */
-.song-list > div:hover .play-icon {
-  visibility: visible !important;
-  color: #1890ff !important;
 }
 
 /* 歌手列表样式 */

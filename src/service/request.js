@@ -1,6 +1,5 @@
 import axios from "axios"
-import {useUserStore} from "@/stores/user.js";
-import {useRouter} from "vue-router";
+
 
 
 const api = axios.create(
@@ -33,7 +32,7 @@ api.interceptors.response.use(function (response) {
     }, function (error) {
         // 超出 2xx 范围的状态码都会触发该函数。
         // 对响应错误做点什么
-        let errorMessage = '未知错误，请稍后再试！';
+        let errorMessage
         // 1. 请求已发出，但服务器响应状态码不在 2xx 范围内
         if (error.response) {
             const {status, data} = error.response;

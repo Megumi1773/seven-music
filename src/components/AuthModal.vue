@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref, useTemplateRef, watch} from "vue"
+import {computed, ref, useTemplateRef} from "vue"
 import {Login} from '@/api/user'
 import {useUserStore} from '@/stores/user'
 import {FormRules, useMessage} from 'naive-ui'

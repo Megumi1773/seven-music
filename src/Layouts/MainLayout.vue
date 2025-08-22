@@ -20,15 +20,13 @@ import {
   Trash,
 } from '@vicons/tabler'
 import {Play} from '@vicons/ionicons5'
-import HeaderNav from "@/components/HeaderNav.vue";
-import MusicPlayer from "@/components/MusicPlayer.vue";
-import {RouterLink, useRoute, useRouter} from "vue-router";
-import {usePlayerStore} from "@/stores/player.js";
-import {storeToRefs} from "pinia";
-import {getPlaylists} from "@/api/songlist.js";
-import {useUserStore} from "@store/user.js";
-import {useStorage} from "@vueuse/core";
-import {useSongListStore} from "@store/songlist.js";
+import HeaderNav from "@/components/HeaderNav.vue"
+import MusicPlayer from "@/components/MusicPlayer.vue"
+import {RouterLink, useRoute, useRouter} from "vue-router"
+import {usePlayerStore} from "@/stores/player.js"
+import {storeToRefs} from "pinia"
+import {useUserStore} from "@store/user.js"
+import {useSongListStore} from "@store/songlist.js"
 
 const router = useRouter()
 const route = useRoute()
@@ -296,10 +294,6 @@ const formatPlayerTime = (v) => {
   border-radius: 6px;
   cursor: pointer;
   transition: background .2s;
-}
-
-.track-row.active {
-  background-color: #e5e7eb;
 }
 
 .track-row.active .name {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import {getPlaylistById, getPlayListSongs} from '@/api/songlist'
-import {ref, h, watch} from "vue";
+import {ref,watch} from "vue";
 import {NIcon,useMessage} from "naive-ui"
-import {Heart, Play, Download} from '@vicons/ionicons5';
+import {Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
 import SongsTable from "@/components/SongsTable.vue";
 
