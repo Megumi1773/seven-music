@@ -98,13 +98,11 @@ const latestSongs = [
 
 // 播放歌曲函数
 const playSong = (song) => {
-  console.log('播放歌曲:', song)
   // 实际项目中这里会调用音乐播放API
 }
 
 // 收藏歌曲函数
 const favoriteSong = (song) => {
-  console.log('收藏歌曲:', song)
   // 实际项目中这里会调用收藏API
 }
 // 歌单

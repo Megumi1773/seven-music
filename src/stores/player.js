@@ -11,6 +11,7 @@ export const usePlayerStore = defineStore('player', () => {
         artist_name: '',
         album_name: '',
         album_cover: '',
+        album_id:'',
         url: '',
     })
 

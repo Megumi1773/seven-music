@@ -6,12 +6,9 @@ import {DuplicateSharp, Heart, Play} from '@vicons/ionicons5'
 
 const router = useRouter()
 const data = defineModel('albumsList', {required: true})
-console.log(data)
 const goDetail = (id) => {
   router.push(`/album/${id}`)
 }
-
-
 // 右键事件 右键歌单时
 const x = ref(0)
 const y = ref(0)

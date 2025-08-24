@@ -81,7 +81,6 @@ const albums = ref([])
 const getData = async () => {
   try {
     let res = await getArtistAlbums(artistId.value)
-    console.log(res.data)
     albums.value = res.data.data || []
   } catch (e) {
     msg.error(e.message)

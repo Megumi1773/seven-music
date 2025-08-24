@@ -3,17 +3,21 @@ import {NIcon, useMessage} from 'naive-ui';
 import {h} from "vue";
 import {Heart} from "@vicons/ionicons5";
 import {usePlayerStore} from '@/stores/player'
+import {useLikeSongStore} from '@store/likesong'
+import {storeToRefs} from "pinia";
+import {useRouter} from "vue-router"
 
 const props = defineProps({
   columns: Array,
   loading: Boolean,
   rowClick: Function,
 })
+const router = useRouter()
 const data = defineModel('data', {required: true})
 const loading = defineModel('loading', {required: true})
 let msg = useMessage()
-
-
+const likeStore = useLikeSongStore()
+const {LikeSongIds} = storeToRefs(likeStore)
 const columns = [
   {
     title: "#",
@@ -31,7 +35,7 @@ const columns = [
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          width: '400px',
+          width: '380px',
         }
       }, [
         // 专辑封面图片
@@ -57,6 +61,15 @@ const columns = [
   {
     title: "专辑",
     key: "album_name",
+    render(row: any) {
+      return h('div', {
+        style: {cursor: 'pointer'},
+        onClick: (e: Event) => {
+          e.stopPropagation()
+          router.push(`/album/${row.album_id}`)
+        }
+      },row.album_name)
+    }
   },
   {
     title: "喜欢",
@@ -64,10 +77,11 @@ const columns = [
       // 使用 h 函数渲染 NIcon 并传入图标组件
       return h(NIcon, {
         size: 18, // 图标大小
-        color: row.isLiked ? 'red' : '#999', // 可以根据数据动态改变颜色
+        color: LikeSongIds.value.has(row.id) ? 'red' : '#999',
         style: {cursor: 'pointer'},
-        onClick: () => {
-          msg.success("喜欢听Eason")
+        onClick: (e: Event) => {
+          e.stopPropagation()
+          likeStore.toggleLike(row.id)
         }
       }, {
         default: () => h(Heart) // 传入图标组件

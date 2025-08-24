@@ -25,7 +25,6 @@ const loading = ref(false)
 const getAlbumDetail = async () => {
   loading.value = true
   let a = await getAlbumById(albumId.value)
-  console.log(a.data.data)
   playlistDetail.value = a.data.data
   if (a.data.code === 200) {
     loading.value = false

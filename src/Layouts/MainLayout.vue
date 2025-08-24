@@ -27,6 +27,7 @@ import {usePlayerStore} from "@/stores/player.js"
 import {storeToRefs} from "pinia"
 import {useUserStore} from "@store/user.js"
 import {useSongListStore} from "@store/songlist.js"
+import {useLikeSongStore} from "@store/likesong.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -113,7 +114,7 @@ const menuOptions = computed(() => [
                     previewDisabled: true,
                     style: {borderRadius: '4px', objectFit: 'cover'}
                   }),
-                  h('span', p.name)
+                  h('span', {style: {width: '5px', textOverflow: 'ellipsis', overFlow: 'hidden'}}, p.name)
                 ]
               }
           )
@@ -160,7 +161,9 @@ const formatPlayerTime = (v) => {
   return `${m}:${s}`
 }
 
-
+//获取我喜欢的歌曲的id
+const likesongStore = useLikeSongStore()
+likesongStore.getData()
 </script>
 
 <template>

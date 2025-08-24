@@ -122,6 +122,7 @@ const deleteSongList = async () => {
   let res = await deletePlaylist(currentID.value)
   if (res.data.code === 200) {
     msg.success(res.data.message)
+    await songListStore.getUserPlaylist()
   }
 }
 
