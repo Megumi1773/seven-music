@@ -10,11 +10,13 @@ export const useSongListStore = defineStore('songList', () => {
     const {isLogin} = storeToRefs(userStore)
     // 获取用户歌单
     const songList = ref([])
+    let likeListId = ref(0)
     const getUserPlaylist = async () => {
         if (isLogin.value) {
             let res = await getPlaylists()
             if (res.data.code === 200) {
                 songList.value = res.data.data || []
+                likeListId.value = songList.value[0].id
             } else {
                 songList.value = []
             }
@@ -22,6 +24,7 @@ export const useSongListStore = defineStore('songList', () => {
     }
     return {
         songList,
-        getUserPlaylist
+        getUserPlaylist,
+        likeListId
     }
 })

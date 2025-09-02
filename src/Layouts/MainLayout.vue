@@ -25,18 +25,17 @@ import MusicPlayer from "@/components/MusicPlayer.vue"
 import {RouterLink, useRoute, useRouter} from "vue-router"
 import {usePlayerStore} from "@/stores/player.js"
 import {storeToRefs} from "pinia"
-import {useUserStore} from "@store/user.js"
 import {useSongListStore} from "@store/songlist.js"
 import {useLikeSongStore} from "@store/likesong.js";
+import FullScreenPlayer from "@/components/FullScreenPlayer.vue";
+import {useUserStore} from "@store/user.js";
 
 const router = useRouter()
 const route = useRoute()
-const userStore = useUserStore()
 const songListStore = useSongListStore()
 // 获取用户歌单
-const {songList} = storeToRefs(songListStore) || [];
+const {songList, likeListId} = storeToRefs(songListStore) || [];
 songListStore.getUserPlaylist()
-
 // 侧边栏菜单选项
 const menuOptions = computed(() => [
   {
@@ -87,7 +86,7 @@ const menuOptions = computed(() => [
             RouterLink,
             {
               to: {
-                name: 'like',
+                path: `/playlist/${likeListId.value}`,
               }
             },
             {default: () => '我喜欢的'}
@@ -163,7 +162,17 @@ const formatPlayerTime = (v) => {
 
 //获取我喜欢的歌曲的id
 const likesongStore = useLikeSongStore()
-likesongStore.getData()
+const userStore = useUserStore()
+const {isLogin} = storeToRefs(userStore)
+if (isLogin.value) {
+  likesongStore.getData()
+}
+
+// 全屏播放器控制
+const fullPlayerShow = ref(false)
+const openFullPlayer = () => {
+  fullPlayerShow.value = true
+}
 </script>
 
 <template>
@@ -202,7 +211,7 @@ likesongStore.getData()
     <!-- 底部播放器控制栏 -->
     <n-layout-footer style="height: 80px; padding: 12px 24px; background-color: #fff; border-top: 1px solid #e0e0e0;"
                      v-if="playlistSongNumbers > 0">
-      <MusicPlayer @openPlayList="handleOpenList"></MusicPlayer>
+      <MusicPlayer @openPlayList="handleOpenList" @click.stop="openFullPlayer"></MusicPlayer>
     </n-layout-footer>
   </n-layout>
 
@@ -233,7 +242,7 @@ likesongStore.getData()
           <div
               :key="item.id"
               class="track-row hover:bg-gray-100"
-              :class="{ active: currentSong.id === item.id }"
+              :class="{ active: currentSong.UUID === item.UUID }"
               @click.stop="playerStore.play(item)"
           >
             <!-- 序号 / 封面 -->
@@ -248,7 +257,7 @@ likesongStore.getData()
 
               <!-- 图标：绝对居中 -->
               <n-icon
-                  v-if="currentSong.id === item.id"
+                  v-if="currentSong.UUID === item.UUID"
                   :size="24"
                   color="#6CB364"
                   class="absolute"
@@ -282,11 +291,22 @@ likesongStore.getData()
       </n-virtual-list>
     </n-drawer-content>
   </n-drawer>
+
+  <!--全屏播放器-->
+<!--  <n-drawer v-model:show="fullPlayerShow" :show-mask="'transparent'">-->
+<!--    <n-drawer-content>-->
+<!--      <full-screen-player></full-screen-player>-->
+<!--    </n-drawer-content>-->
+<!--  </n-drawer>-->
 </template>
 
 <style scoped>
 .playlist {
   padding: 0 12px;
+}
+
+.active {
+  background-color: #f3f4f6;
 }
 
 .track-row {

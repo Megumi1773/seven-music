@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import {getPlaylistById, getPlayListSongs} from '@/api/songlist'
-import {ref,watch} from "vue";
-import {NIcon,useMessage} from "naive-ui"
-import {Play, Download} from '@vicons/ionicons5';
+import {ref, watch, h} from "vue";
+import {NIcon, useMessage} from "naive-ui"
+import {Play, Download} from '@vicons/ionicons5'
+import {
+  Trash,
+  PlaylistAdd,
+  PlayerSkipForward,
+  PlayerPlay
+} from '@vicons/tabler'
 import {usePlayerStore} from '@/stores/player'
+import {useUserStore} from '@/stores/user'
 import SongsTable from "@/components/SongsTable.vue";
 
 const defaultAvatar =
@@ -18,7 +25,8 @@ const playlistDetail = ref({
   cover: '',
   nickname: '',
   user_avatar: '',
-  created_at: ''
+  created_at: '',
+  user_id: '',
 })
 const playlistSongs = ref([])
 const loading = ref(false)
@@ -55,8 +63,8 @@ const formatDate = (iso: string) => new Date(iso).toLocaleDateString('zh-CN', {
 const playerStore = usePlayerStore()
 
 const playAll = () => {
-  playerStore.play(playlistSongs.value[0])
   playerStore.addPlaylist(playlistSongs.value)
+  playerStore.play(playlistSongs.value[0])
 }
 watch(
     () => route.params.id,
@@ -67,6 +75,36 @@ watch(
     },
     {immediate: true}
 )
+const handleDeleteSuccess = () => {
+  getPlaylistSong()
+}
+const userStore = useUserStore()
+const songTableOptions = [
+  {
+    label: '播放',
+    key: 'play',
+    icon: () => h(NIcon, null, {default: () => h(PlayerPlay)}),
+  },
+  {
+    label: '下一首播放',
+    key: 'addPlaylist',
+    icon: () => h(NIcon, null, {default: () => h(PlayerSkipForward)}),
+  },
+  {type: 'divider', key: 'd1'},
+  {
+    label: '收藏',
+    key: 'addFavorite',
+    icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
+  },
+  {type: 'divider', key: 'd2'},
+  {
+    label: '删除歌曲',
+    key: 'delete',
+    icon: () => h(NIcon, null, {default: () => h(Trash)}),
+  },
+]
+
+const collectModalShow = ref(false)
 </script>
 
 <template>
@@ -124,7 +162,9 @@ watch(
       </n-flex>
     </n-flex>
   </n-card>
-  <SongsTable v-model:data="playlistSongs" v-model:loading="loading"></SongsTable>
+  <SongsTable v-model:collect-modal-show="collectModalShow"
+              :options="songTableOptions"
+              @delete-success="handleDeleteSuccess" v-model:data="playlistSongs" v-model:loading="loading"></SongsTable>
   <!--  <pre>-->
   <!--歌单ID:{{ playlistId }}-->
   <!--歌单信息:{-->

@@ -2,10 +2,11 @@
 import SongsTable from "@/components/SongsTable.vue"
 import {getEveryDaySongs} from '@/api/everyday'
 import dayjs from 'dayjs'
-import {computed, ref} from 'vue'
+import {computed, ref, h} from 'vue'
+import {NIcon} from 'naive-ui'
 import 'dayjs/locale/zh-cn'
 import {getYiYan} from '@/api/everyday'
-import {PlayerPlay} from "@vicons/tabler"
+import {PlayerPlay, PlaylistAdd, PlayerSkipForward} from "@vicons/tabler"
 import {usePlayerStore} from '@/stores/player'
 
 dayjs.locale('zh-cn')
@@ -45,6 +46,23 @@ const playAll = () => {
   playerStore.play(data.value[0])
   playerStore.addPlaylist(data.value)
 }
+// 给列表的右键菜单
+const oP = [{
+  label: '播放',
+  key: 'play',
+  icon: () => h(NIcon, null, {default: () => h(PlayerPlay)}),
+},
+  {
+    label: '下一首播放',
+    key: 'addPlaylist',
+    icon: () => h(NIcon, null, {default: () => h(PlayerSkipForward)}),
+  },
+  {type: 'divider', key: 'd1'},
+  {
+    label: '收藏',
+    key: 'addFavorite',
+    icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
+  },]
 </script>
 
 <template>
@@ -57,9 +75,7 @@ const playAll = () => {
       <span class="ml-3 text-4xl font-bold text-amber-500">{{ week }}</span>
     </n-statistic>
     <n-marquee class="text-2xl font-medium text-slate-400">
-      <template #default>
-        {{ aSentence }}
-      </template>
+      {{ aSentence }}
     </n-marquee>
     <n-button-group>
       <n-button type="success" @click="playAll">
@@ -77,7 +93,7 @@ const playAll = () => {
     <!--    <n-marquee class="text-2xl font-bold text-slate-400">-->
     <!--      {{ aSentence }}-->
     <!--    </n-marquee>-->
-    <SongsTable v-model:data="data" v-model:loading="loading"/>
+    <SongsTable :options="oP" v-model:data="data" v-model:loading="loading"/>
   </n-card>
 </template>
 

@@ -29,7 +29,9 @@ export const addPlayListSong = async (id, data) => {
 export const getLikeSongIds = async () => {
     return await request.get('/playlists/likesongids')
 }
-
+export const deleteSongInSongList = async (id, songid) => {
+    return await request.delete(`/playlists/${id}/songs/${songid}`)
+}
 export const toggleLikeSong = async (data) => {
     return await request.post(`/playlists/toggle/like`, data)
 }

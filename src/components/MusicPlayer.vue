@@ -16,6 +16,7 @@ import {usePlayerStore} from '@store/player'
 import {useMediaControls, useStorage} from "@vueuse/core";
 import {addPlayListSong} from '@/api/songlist'
 import {useSongListStore} from '@store/songlist'
+import CollectModal from "@/components/CollectModal.vue";
 
 const player = usePlayerStore()
 const {currentSong: song} = storeToRefs(player)
@@ -43,7 +44,7 @@ const togglePlay = () => {
   playing.value = !playing.value
 }
 // 通知父组件展开播放列表
-const emits = defineEmits(['openPlayList'])
+const emits = defineEmits(['openPlayList','click'])
 // 播完 自动切歌
 watch(ended, () => {
   player.nextSong()
@@ -60,18 +61,7 @@ const collectModalShow = ref(false)
 const openModal = () => {
   collectModalShow.value = true
 }
-const collectPlaylist = async (id: number) => {
-  let data = {
-    song_ids: [song.value.id],
-  }
-  let res = await addPlayListSong(id, data)
-  if (res.data.code === 200) {
-    msg.success(res.data.message)
-    collectModalShow.value = false
-  }
-}
 const songListStore = useSongListStore()
-const {songList} = storeToRefs(songListStore)
 </script>
 
 <template>
@@ -165,24 +155,25 @@ const {songList} = storeToRefs(songListStore)
   </div>
 
   <!--收藏模态框-->
-  <n-modal
-      v-model:show="collectModalShow"
-      class="max-w-xl"
-      preset="card"
-      title="收藏到歌单"
-      size="huge"
-      :bordered="false"
-  >
-    <n-list hoverable clickable>
-      <n-list-item v-for="item in songList" :key="item.id" @click="collectPlaylist(item.id)">
-        <n-flex align="center">
-          <n-image :src="item.cover" mode="aspectFit" class="rounded" width="96" height="96">
-          </n-image>
-          <p>{{ item.name }}</p>
-        </n-flex>
-      </n-list-item>
-    </n-list>
-  </n-modal>
+  <CollectModal v-model:show="collectModalShow"></CollectModal>
+  <!--  <n-modal-->
+  <!--      v-model:show="collectModalShow"-->
+  <!--      class="max-w-xl"-->
+  <!--      preset="card"-->
+  <!--      title="收藏到歌单"-->
+  <!--      size="huge"-->
+  <!--      :bordered="false"-->
+  <!--  >-->
+  <!--    <n-list hoverable clickable>-->
+  <!--      <n-list-item v-for="item in songList" :key="item.id" @click="collectPlaylist(item.id)">-->
+  <!--        <n-flex align="center">-->
+  <!--          <n-image :src="item.cover" mode="aspectFit" class="rounded" width="96" height="96">-->
+  <!--          </n-image>-->
+  <!--          <p>{{ item.name }}</p>-->
+  <!--        </n-flex>-->
+  <!--      </n-list-item>-->
+  <!--    </n-list>-->
+  <!--  </n-modal>-->
 </template>
 
 <style scoped>

@@ -43,11 +43,6 @@ const router = createRouter({
             component: () => import('@/views/MusicLibView.vue')
         },
         {
-            path: '/like',
-            name: 'like',
-            component: () => import('@/views/LikeSongView.vue')
-        },
-        {
             path: '/playlist/:id',
             name: 'playlist',
             component: () => import('@/views/PlaylistDetailView.vue')

@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {ref, computed} from 'vue'
+import {computed, ref} from 'vue'
 import {getSongUrl} from '@/api/songlist.js'
 
 
@@ -11,8 +11,9 @@ export const usePlayerStore = defineStore('player', () => {
         artist_name: '',
         album_name: '',
         album_cover: '',
-        album_id:'',
+        album_id: '',
         url: '',
+        UUID: ''
     })
 
     async function play(song) {
@@ -25,9 +26,12 @@ export const usePlayerStore = defineStore('player', () => {
 
     function addPlaylist(songs) {
         if (Array.isArray(songs)) {
-            playlists.value = songs
+            playlists.value = songs.map(song => ({
+                ...song,
+                UUID: crypto.randomUUID()
+            }))
         } else {
-            playlists.value.push(songs)
+            playlists.value.push({...songs, UUID: crypto.randomUUID()})
         }
     }
 

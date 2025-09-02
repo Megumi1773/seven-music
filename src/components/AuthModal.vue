@@ -6,6 +6,7 @@ import {FormRules, useMessage} from 'naive-ui'
 import {useCountdown} from "@vueuse/core"
 import {getMailCode, register} from '@/api/user'
 import type {FormInst} from 'naive-ui'
+import {useLikeSongStore} from '@store/likesong'
 
 let msg = useMessage()
 const userStore = useUserStore()
@@ -17,6 +18,9 @@ const loginForm = ref({
 const emit = defineEmits(["loginSuccess"])
 const loginFormRef = useTemplateRef<FormInst>('loginFormRef')
 const loading = ref(false)
+//获取我喜欢的歌曲的id
+const likesongStore = useLikeSongStore()
+
 const handleLogin = async () => {
   loginFormRef.value?.validate(async (err) => {
     if (err) {
@@ -34,6 +38,7 @@ const handleLogin = async () => {
         userStore.setUserInfo(res.data.data.user)
         userStore.setToken(res.data.data.token)
         msg.success(res.data.message)
+        await likesongStore.getData()
         emit('loginSuccess')
         window.location.reload()
       }

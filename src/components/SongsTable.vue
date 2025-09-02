@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import {NIcon, useMessage} from 'naive-ui';
-import {h} from "vue";
+import {computed, h, nextTick, ref} from "vue";
 import {Heart} from "@vicons/ionicons5";
 import {usePlayerStore} from '@/stores/player'
 import {useLikeSongStore} from '@store/likesong'
 import {storeToRefs} from "pinia";
-import {useRouter} from "vue-router"
+import {useRouter, useRoute} from "vue-router"
+import {deleteSongInSongList} from '@/api/songlist'
+import CollectModal from "@/components/CollectModal.vue";
 
-const props = defineProps({
-  columns: Array,
-  loading: Boolean,
-  rowClick: Function,
-})
 const router = useRouter()
+const route = useRoute()
+const playlistId = ref(route.params.id)
 const data = defineModel('data', {required: true})
 const loading = defineModel('loading', {required: true})
 let msg = useMessage()
-const likeStore = useLikeSongStore()
-const {LikeSongIds} = storeToRefs(likeStore)
-const columns = [
+const likeSongStore = useLikeSongStore()
+const {LikeSongIds} = storeToRefs(likeSongStore)
+const columns = computed(() => ([
   {
     title: "#",
     key: "id",
@@ -68,7 +67,7 @@ const columns = [
           e.stopPropagation()
           router.push(`/album/${row.album_id}`)
         }
-      },row.album_name)
+      }, row.album_name)
     }
   },
   {
@@ -81,7 +80,7 @@ const columns = [
         style: {cursor: 'pointer'},
         onClick: (e: Event) => {
           e.stopPropagation()
-          likeStore.toggleLike(row.id)
+          likeSongStore.toggleLike(row.id)
         }
       }, {
         default: () => h(Heart) // 传入图标组件
@@ -96,8 +95,7 @@ const columns = [
         default: () => formtDate(row.duration),
       })
     }
-  }
-]
+  }]))
 // 歌曲时长格式化
 const formtDate = (num: number) => {
   let minutes = Math.floor(num / 60)
@@ -105,13 +103,61 @@ const formtDate = (num: number) => {
   return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
 const playerStore = usePlayerStore()
+const theCurrentLine = ref<any>({})
 const rowClick = (song: any) => ({
   style: 'cursor: pointer;',
   ondblclick: () => {
     playerStore.play(song)
     playerStore.addPlaylist(data.value)
+  },
+  onContextmenu: (e: MouseEvent) => {
+    theCurrentLine.value = song
+    e.preventDefault()
+    nextTick().then(() => {
+      showDropdown.value = true
+      x.value = e.clientX
+      y.value = e.clientY
+    })
   }
 })
+// 右键弹窗
+const x = ref(0)
+const y = ref(0)
+const dropDownOptions = defineProps({
+  options: Array,
+})
+const showDropdown = ref(false)
+const onClickoutside = (e: Event) => {
+  showDropdown.value = false
+}
+const handleSelect = (key: any) => {
+  switch (key) {
+    case 'play':
+      playerStore.play(theCurrentLine.value)
+      showDropdown.value = false
+      break
+    case 'addPlaylist':
+      playerStore.addPlaylist(theCurrentLine.value)
+      showDropdown.value = false
+      break
+    case 'addFavorite':
+
+      break
+    case 'delete':
+      deleteSongInPlayList()
+      break
+  }
+}
+const deleteSongInPlayList = async () => {
+  let res = await deleteSongInSongList(playlistId.value, theCurrentLine.value.id)
+  if (res.data.code === 200) {
+    window.$message.success(res.data.message)
+    showDropdown.value = false
+    emit("deleteSuccess")
+  }
+}
+const emit = defineEmits(['deleteSuccess'])
+const show = defineModel('collectModalShow', {required: true})
 </script>
 
 <template>
@@ -123,6 +169,19 @@ const rowClick = (song: any) => ({
       :row-props="rowClick"
       striped
   />
+  <n-dropdown
+      placement="bottom-start"
+      trigger="manual"
+      :x="x"
+      :y="y"
+      :options="options"
+      :show="showDropdown"
+      :on-clickoutside="onClickoutside"
+      @select="handleSelect"
+  />
+
+  <!--  搜藏模态框-->
+  <CollectModal v-model:show="show"></CollectModal>
 </template>
 
 <style scoped>

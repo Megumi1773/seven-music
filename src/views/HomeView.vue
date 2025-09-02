@@ -7,6 +7,7 @@ import {useSongListStore} from "@store/songlist.js"
 import {storeToRefs} from "pinia"
 import {useUserStore} from "@store/user.js"
 import dayjs from "dayjs"
+import SongsTable from "@/components/SongsTable.vue";
 // 轮播图数据
 const router = useRouter()
 const banners = [
@@ -59,52 +60,11 @@ const hotSingers = [
 
 // 最新音乐数据
 const latestSongs = [
-  {
-    id: 1,
-    title: '最伟大的作品',
-    artist: '周杰伦',
-    album: '最伟大的作品',
-    duration: '04:42'
-  },
-  {
-    id: 2,
-    title: '还在流浪',
-    artist: '周杰伦',
-    album: '最伟大的作品',
-    duration: '04:15'
-  },
-  {
-    id: 3,
-    title: '错过的烟火',
-    artist: '周杰伦',
-    album: '最伟大的作品',
-    duration: '04:30'
-  },
-  {
-    id: 4,
-    title: '红颜如霜',
-    artist: '周杰伦',
-    album: '最伟大的作品',
-    duration: '04:12'
-  },
-  {
-    id: 5,
-    title: '等你下课',
-    artist: '周杰伦',
-    album: '等你下课',
-    duration: '04:32'
-  }
+
+  {id: 1,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "反高潮(Live)", duration: 235, album_id: 0, artist_name: "陈奕迅"},
+  {id: 2,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "那一夜沒有说(Live)", duration: 215, album_id: 0, artist_name: "陈奕迅"},
+  {id: 3,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "Every Time We Say Goodbye(Live)", duration: 180, album_id: 0, artist_name: "陈奕迅"}
 ]
-
-// 播放歌曲函数
-const playSong = (song) => {
-  // 实际项目中这里会调用音乐播放API
-}
-
-// 收藏歌曲函数
-const favoriteSong = (song) => {
-  // 实际项目中这里会调用收藏API
-}
 // 歌单
 const songListStore = useSongListStore()
 const {songList} = storeToRefs(songListStore)
@@ -120,6 +80,7 @@ const welcome = computed(() => {
   if (h < 18) return '下午好'
   return '晚上好'
 })
+const loading = ref(false)
 </script>
 <template>
   <div class="home-container">
@@ -157,7 +118,7 @@ const welcome = computed(() => {
             }}，</span>
           <span style="color: #888">猜你想听~~</span>
         </template>
-        <n-grid :cols="4" :x-gap="24" :y-gap="24">
+        <n-grid :cols="5" :x-gap="24" :y-gap="24">
           <n-grid-item v-for="item in songList" :key="item.id"
                        class="group-hover:transform translate-4 duration-300 min-w-16">
             <div @click="goDetail(item.id)" class="group cursor-pointer">
@@ -205,7 +166,7 @@ const welcome = computed(() => {
         <n-card v-for="playlist in recommendedPlaylists" :key="playlist.id"
                 :style="{ borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s', cursor: 'pointer' }"
                 hoverable
-                @click="$router.push(`/everyday`)"
+                  @click="$router.push(`/everyday`)"
                 class="group-hover:bg-black-50 transition-all duration-200">
           <div slot="cover" :style="{ position: 'relative' }">
             <img :src="playlist.cover" alt="歌单封面" :style="{ width: '100%', height: '180px', objectFit: 'cover' }"/>
@@ -235,29 +196,7 @@ const welcome = computed(() => {
         </div>
       </div>
 
-      <div class="song-list" :style="{ backgroundColor: '#fff', borderRadius: '8px', overflow: 'hidden' }">
-        <div
-            :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', fontWeight: 'bold', color: '#666' }">
-          <div>序号</div>
-          <div>歌曲</div>
-          <div>歌手</div>
-          <div>时长</div>
-        </div>
-
-        <div v-for="(song, index) in latestSongs" :key="song.id"
-             :style="{ display: 'grid', gridTemplateColumns: '40px 1fr 1fr 80px', padding: '10px 20px', borderBottom: '1px solid #f0f0f0', alignItems: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }"
-             :class="{ 'hover:bg-gray-50': true }" @click="playSong(song)">
-          <div :style="{ color: '#999' }">{{ index + 1 }}</div>
-          <div :style="{ display: 'flex', alignItems: 'center' }">
-            <span>{{ song.title }}</span>
-          </div>
-          <div>{{ song.artist }}</div>
-          <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
-            <span>{{ song.duration }}</span>
-            <n-icon :component="HeartOutline" @click.stop="favoriteSong(song,index)"></n-icon>
-          </div>
-        </div>
-      </div>
+      <SongsTable v-model:data="latestSongs" v-model:loading="loading" :options="[]"></SongsTable>
     </div>
 
     <!-- 热门歌手区域 -->

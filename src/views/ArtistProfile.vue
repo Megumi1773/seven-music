@@ -1,8 +1,8 @@
 <script setup>
 import {getArtistInfo, getArtistSongs, getArtistSongCount} from '@/api/artist'
 import {ref, computed, watch} from "vue";
-import {useMessage,} from 'naive-ui'
-import {User} from '@vicons/tabler'
+import {NIcon, useMessage,} from 'naive-ui'
+import {PlayerPlay, PlayerSkipForward, PlaylistAdd, User} from '@vicons/tabler'
 
 import {useRoute} from "vue-router";
 import {Play, HeartOutline} from "@vicons/ionicons5";
@@ -89,6 +89,25 @@ const getData = async () => {
   }
 }
 getData()
+
+const oP = [
+  {
+    label: '播放',
+    key: 'play',
+    icon: () => h(NIcon, null, {default: () => h(PlayerPlay)}),
+  },
+  {
+    label: '下一首播放',
+    key: 'addPlaylist',
+    icon: () => h(NIcon, null, {default: () => h(PlayerSkipForward)}),
+  },
+  {type: 'divider', key: 'd1'},
+  {
+    label: '收藏',
+    key: 'addFavorite',
+    icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
+  },
+]
 </script>
 
 <template>
@@ -138,7 +157,7 @@ getData()
       <!--      tab 切换栏-->
       <n-tabs type="line" animated>
         <n-tab-pane name="歌曲" tab="歌曲">
-          <SongsTable v-model:loading="loading" v-model:data="SongList"/>
+          <SongsTable :options="oP" v-model:loading="loading" v-model:data="SongList"/>
           <n-pagination v-model:page="page" :page-count="songsNumber"/>
         </n-tab-pane>
         <n-tab-pane name="专辑" tab="专辑">

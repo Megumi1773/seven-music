@@ -1,11 +1,12 @@
 <script setup>
 import {useRoute} from "vue-router";
 import {getAlbumById, getAlbumSongs} from '@/api/albums.js'
-import {ref, watch} from "vue";
+import {h, ref, watch} from "vue";
 import {NIcon, useMessage} from "naive-ui"
 import {Play, Download} from '@vicons/ionicons5';
 import {usePlayerStore} from '@/stores/player'
 import SongsTable from "@/components/SongsTable.vue";
+import {PlayerPlay, PlayerSkipForward, PlaylistAdd} from "@vicons/tabler";
 
 const defaultAvatar =
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4='
@@ -55,8 +56,8 @@ const formatDate = (iso) => new Date(iso).toLocaleDateString('zh-CN', {
 const playerStore = usePlayerStore()
 
 const playAll = () => {
-  playerStore.play(playlistSongs.value[0])
   playerStore.addPlaylist(playlistSongs.value)
+  playerStore.play(playlistSongs.value[0])
 }
 watch(
     () => route.params.id,
@@ -67,6 +68,26 @@ watch(
     },
     {immediate: true}
 )
+
+// 给列表的右键菜单
+const albumOptions = [{
+  label: '播放',
+  key: 'play',
+  icon: () => h(NIcon, null, {default: () => h(PlayerPlay)}),
+},
+  {
+    label: '下一首播放',
+    key: 'addPlaylist',
+    icon: () => h(NIcon, null, {default: () => h(PlayerSkipForward)}),
+  },
+  {type: 'divider', key: 'd1'},
+  {
+    label: '收藏',
+    key: 'addFavorite',
+    icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
+  },]
+
+const collectModalShow = ref(false)
 </script>
 
 <template>
@@ -124,7 +145,7 @@ watch(
       </n-flex>
     </n-flex>
   </n-card>
-  <SongsTable v-model:data="playlistSongs" v-model:loading="loading"></SongsTable>
+  <SongsTable :options="albumOptions" v-model:collect-modal-show="collectModalShow" v-model:data="playlistSongs" v-model:loading="loading"></SongsTable>
   <!--  <pre>-->
   <!--歌单ID:{{ playlistId }}-->
   <!--歌单信息:{-->

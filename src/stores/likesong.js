@@ -1,13 +1,13 @@
 import {defineStore} from 'pinia'
-import {getLikeSongIds, toggleLikeSong} from "@/api/songlist.js"
-import {set} from "@vueuse/core";
+import {getLikeSongIds, toggleLikeSong} from '@/api/songlist.js'
 
 export const useLikeSongStore = defineStore("LikeSong", () => {
-    const LikeSongIds = ref(new Set())
+    const rowIds = ref(new Set())
+    const LikeSongIds = computed(()=>rowIds.value)
     const getData = async () => {
         let res = await getLikeSongIds()
         if (res.data.code === 200) {
-            LikeSongIds.value = new Set(res.data.data)
+            rowIds.value = new Set(res.data.data)
         }
     }
     const toggleLike = async (id) => {
