@@ -61,9 +61,30 @@ const hotSingers = [
 // 最新音乐数据
 const latestSongs = [
 
-  {id: 1,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "反高潮(Live)", duration: 235, album_id: 0, artist_name: "陈奕迅"},
-  {id: 2,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "那一夜沒有说(Live)", duration: 215, album_id: 0, artist_name: "陈奕迅"},
-  {id: 3,cover:"https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000", name: "Every Time We Say Goodbye(Live)", duration: 180, album_id: 0, artist_name: "陈奕迅"}
+  {
+    id: 1,
+    cover: "https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000",
+    name: "反高潮(Live)",
+    duration: 235,
+    album_id: 0,
+    artist_name: "陈奕迅"
+  },
+  {
+    id: 2,
+    cover: "https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000",
+    name: "那一夜沒有说(Live)",
+    duration: 215,
+    album_id: 0,
+    artist_name: "陈奕迅"
+  },
+  {
+    id: 3,
+    cover: "https://y.qq.com/music/photo_new/T002R300x300M000001sM5UF3kkknW_3.jpg?max_age=2592000",
+    name: "Every Time We Say Goodbye(Live)",
+    duration: 180,
+    album_id: 0,
+    artist_name: "陈奕迅"
+  }
 ]
 // 歌单
 const songListStore = useSongListStore()
@@ -81,6 +102,7 @@ const welcome = computed(() => {
   return '晚上好'
 })
 const loading = ref(false)
+const collectModalShow = ref(false)
 </script>
 <template>
   <div class="home-container">
@@ -166,7 +188,7 @@ const loading = ref(false)
         <n-card v-for="playlist in recommendedPlaylists" :key="playlist.id"
                 :style="{ borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s', cursor: 'pointer' }"
                 hoverable
-                  @click="$router.push(`/everyday`)"
+                @click="$router.push(`/everyday`)"
                 class="group-hover:bg-black-50 transition-all duration-200">
           <div slot="cover" :style="{ position: 'relative' }">
             <img :src="playlist.cover" alt="歌单封面" :style="{ width: '100%', height: '180px', objectFit: 'cover' }"/>
@@ -182,21 +204,6 @@ const loading = ref(false)
           </div>
         </n-card>
       </div>
-    </div>
-
-    <!-- 最新音乐区域 -->
-    <div class="section-container" :style="{ marginBottom: '30px' }">
-      <div class="section-header"
-           :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
-        <h2 :style="{ fontSize: '20px', fontWeight: 'bold', color: '#333' }">最新音乐</h2>
-        <div class="section-more"
-             :style="{ display: 'flex', alignItems: 'center', color: '#1890ff', cursor: 'pointer' }">
-          <span>更多</span>
-          <n-icon :component="CaretForwardOutline"></n-icon>
-        </div>
-      </div>
-
-      <SongsTable v-model:data="latestSongs" v-model:loading="loading" :options="[]"></SongsTable>
     </div>
 
     <!-- 热门歌手区域 -->

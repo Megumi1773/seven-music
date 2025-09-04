@@ -141,7 +141,7 @@ const handleSelect = (key: any) => {
       showDropdown.value = false
       break
     case 'addFavorite':
-
+      show.value = true
       break
     case 'delete':
       deleteSongInPlayList()
@@ -160,7 +160,7 @@ const emit = defineEmits(['deleteSuccess'])
 const show = defineModel('collectModalShow', {required: true})
 </script>
 
-<template>
+ <template>
   <n-data-table
       :loading="loading"
       :columns="columns"
@@ -180,8 +180,8 @@ const show = defineModel('collectModalShow', {required: true})
       @select="handleSelect"
   />
 
-  <!--  搜藏模态框-->
-  <CollectModal v-model:show="show"></CollectModal>
+  <!--  收藏模态框-->
+  <CollectModal v-model:currentline="theCurrentLine" v-model:show="show"></CollectModal>
 </template>
 
 <style scoped>

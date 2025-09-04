@@ -229,7 +229,18 @@ const beforeUpload = (file: any) => {
                 </template>
               </n-input>
             </n-form-item>
-
+            <n-form-item label="邮箱" path="email">
+              <n-input
+                  v-model:value="formData.email"
+                  placeholder="请输入邮箱"
+                  :disabled="true"
+                  class="rounded-lg"
+              >
+                <template #prefix>
+                  <n-icon :component="Mail"/>
+                </template>
+              </n-input>
+            </n-form-item>
             <n-form-item label="昵称" path="nickname">
               <n-input
                   v-model:value="formData.nickname"
@@ -239,19 +250,6 @@ const beforeUpload = (file: any) => {
               >
                 <template #prefix>
                   <n-icon :component="User"/>
-                </template>
-              </n-input>
-            </n-form-item>
-
-            <n-form-item label="邮箱" path="email">
-              <n-input
-                  v-model:value="formData.email"
-                  placeholder="请输入邮箱"
-                  :disabled="!isEditing"
-                  class="rounded-lg"
-              >
-                <template #prefix>
-                  <n-icon :component="Mail"/>
                 </template>
               </n-input>
             </n-form-item>

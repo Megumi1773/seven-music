@@ -5,15 +5,15 @@ import {addPlayListSong} from "@/api/songlist.js";
 import {usePlayerStore} from "@store/player.js";
 
 const show = defineModel('show', {required: true})
-
+const currentData = defineModel('currentline', {required: true})
 const songListStore = useSongListStore()
 const {songList} = storeToRefs(songListStore)
-const player = usePlayerStore()
-const {currentSong: song} = storeToRefs(player)
 const collectPlaylist = async (id) => {
+  // window.$message.info(JSON.stringify(data.value))
   let data = {
-    song_ids: [song.value.id],
+    song_ids: [currentData.value.id],
   }
+
   let res = await addPlayListSong(id, data)
   if (res.data.code === 200) {
     window.$message.success(res.data.message)

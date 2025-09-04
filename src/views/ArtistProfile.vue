@@ -108,6 +108,7 @@ const oP = [
     icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
   },
 ]
+const collectModalShow = ref(false)
 </script>
 
 <template>
@@ -157,7 +158,8 @@ const oP = [
       <!--      tab 切换栏-->
       <n-tabs type="line" animated>
         <n-tab-pane name="歌曲" tab="歌曲">
-          <SongsTable :options="oP" v-model:loading="loading" v-model:data="SongList"/>
+          <SongsTable v-model:collect-modal-show="collectModalShow" :options="oP" v-model:loading="loading"
+                      v-model:data="SongList"/>
           <n-pagination v-model:page="page" :page-count="songsNumber"/>
         </n-tab-pane>
         <n-tab-pane name="专辑" tab="专辑">

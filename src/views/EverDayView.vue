@@ -63,6 +63,8 @@ const oP = [{
     key: 'addFavorite',
     icon: () => h(NIcon, null, {default: () => h(PlaylistAdd)}),
   },]
+
+const collectModalShow = ref(false)
 </script>
 
 <template>
@@ -93,7 +95,8 @@ const oP = [{
     <!--    <n-marquee class="text-2xl font-bold text-slate-400">-->
     <!--      {{ aSentence }}-->
     <!--    </n-marquee>-->
-    <SongsTable :options="oP" v-model:data="data" v-model:loading="loading"/>
+    <SongsTable v-model:collect-modal-show="collectModalShow" :options="oP" v-model:data="data"
+                v-model:loading="loading"/>
   </n-card>
 </template>
 
