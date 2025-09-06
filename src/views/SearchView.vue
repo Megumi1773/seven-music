@@ -1,9 +1,27 @@
-<script setup lang="ts">
+<script setup>
+import {useRoute} from "vue-router";
+import {SearchAll} from "@/api/search.js";
+import {watch} from "vue"
 
+const route = useRoute()
+const searchData = ref({})
+const search = async () => {
+  let res = await SearchAll(route.query.q)
+  console.log(res.data)
+  searchData.value = res.data
+}
+search()
+watch(
+    () => route.query.q,
+    () => {
+      search()
+    })
 </script>
 
 <template>
-  <h1 class="h-full flex justify-center items-center text-6xl">搜索</h1>
+  <pre>{{ route.query.q }}</pre>
+  <hr/>
+  <pre>{{ searchData }}</pre>
 </template>
 
 <style scoped>

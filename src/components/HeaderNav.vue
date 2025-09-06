@@ -7,6 +7,9 @@ import {useRouter} from "vue-router";
 import AuthModal from "@/components/AuthModal.vue";
 
 const searchValue = ref('')
+const goSearch = () => {
+  router.push(`/search?q=${searchValue.value}`);
+}
 const message = useMessage()
 const router = useRouter()
 const userStore = useUserStore()
@@ -44,7 +47,7 @@ const openLoginModal = () => {
 <template>
   <n-flex align="center" justify="space-between" style="height: 100%;">
     <n-flex align="center" justify="center">
-<!--      <n-image :src="'/src/assets/public/logo.png'" rounded class="w-20" style="aspect-ratio: 1/1;object-fit: cover" alt="logo"/>-->
+      <!--      <n-image :src="'/src/assets/public/logo.png'" rounded class="w-20" style="aspect-ratio: 1/1;object-fit: cover" alt="logo"/>-->
       <h2 style="margin: 0; color: #333;">Se7enMusic</h2>
     </n-flex>
 
@@ -58,9 +61,11 @@ const openLoginModal = () => {
         <n-input
             v-model:value="searchValue"
             placeholder="搜索音乐、歌手、专辑..."
+            @keyup.enter="goSearch"
+            clearable
         >
           <template #prefix>
-            <n-icon>
+            <n-icon @click.stop="goSearch" class="search-icon" style="cursor: pointer">
               <search/>
             </n-icon>
           </template>
@@ -103,5 +108,12 @@ const openLoginModal = () => {
 </template>
 
 <style scoped>
-
+/* 鼠标悬停时高亮图标 */
+.search-icon {
+  color: #999;
+  transition: color 0.2s;
+}
+.n-input:hover .search-icon {
+  color: #18a058;   /* 换成你主题的主色 */
+}
 </style>
